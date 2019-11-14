@@ -1,11 +1,16 @@
 :- include('main.pl').
 :- dynamic(lebarPeta/1).
 :- dynamic(tinggiPeta/1).
+:- dynamic(gymPeta/2).
 
 map :-
 	random(10,20,X),
 	random(10,20,Y),
 	asserta(lebarPeta(X)), asserta(tinggiPeta(Y)),!.
+	
+	random(0,X,A),
+	random(0,Y,B),
+	asserta(gymPeta(A,B),!.
 
 isBorderAtas(_,Y) :-
     Y=:=0
@@ -34,5 +39,8 @@ printMap(X,Y) :-
 	isBorderBawah(X,Y), !, write('X').
 printMap(_,_) :-
 	write('-').
+	
+
+
 	
 
