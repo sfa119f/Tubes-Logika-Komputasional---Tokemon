@@ -116,6 +116,28 @@ specialattack(zapdos, 600). specialattack(moltres, 600). specialattack(articuno,
 
 % ----------------------------------
 % VARIASI MAX HEALTH
+maxhealt(articuno,1000).
+maxhealt(moltres,1500).
+maxhealt(zapdos,2000).
+maxhealt(pikachu,500).
+maxhealt(squirtle,400).
+maxhealt(sandshrew,550).
+maxhealt(charmander,700).
+maxhealt(pidgey,450).
+maxhealt(flareon,600).
+maxhealt(magikarp,400).
+maxhealt(diglett,500).
+maxhealt(electrode,450).
+maxhealt(spearow,550).
+maxhealt(gl0om,400).
+maxhealt(magmar,650).
+maxhealt(horsea,500).
+maxhealt(geodude,650).
+maxhealt(magneton,750).
+maxhealt(zubat,450).
+maxhealt(bulbasaur,600).
+maxhealt(oddish,500).
+
 % ----------------------------------
 
 start :- printheader, printhelp, printlegend.
