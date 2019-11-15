@@ -3,14 +3,14 @@
 :- dynamic(tinggiPeta/1).
 :- dynamic(gymPeta/2).
 
-map :-
-	random(10,20,X),
-	random(10,20,Y),
-	asserta(lebarPeta(X)), asserta(tinggiPeta(Y)),!.
+map (X,Y):-
+	% random(10,20,X),
+	% random(10,20,Y),
+	asserta(lebarPeta(X)), asserta(tinggiPeta(Y)),!, printMap(X,Y).
 	
-	random(0,X,A),
-	random(0,Y,B),
-	asserta(gymPeta(A,B),!.
+	% random(0,X,A),
+	% random(0,Y,B),
+	% asserta(gymPeta(A,B),!.
 
 isBorderAtas(_,Y) :-
     Y=:=0

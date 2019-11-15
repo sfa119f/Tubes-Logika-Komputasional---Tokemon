@@ -105,14 +105,14 @@ attack(pidgey, 200). attack(spearow, 80). attack(zubat, 140).
 attack(zapdos, 400). attack(moltres, 400). attack(articuno, 400).
 
 % b. Special Attack
-specialattack(bulbasaur, 300). specialattack(oddish, 180). specialattack(gloom, 240).
-specialattack(charmander, 300). specialattack(flareon, 240). specialattack(magmar, 180).
-specialattack(squirtle, 300). specialattack(magikarp, 220). specialattack(horsea, 220).
-specialattack(sandshrew, 300). specialattack(diglett, 240). specialattack(geodude, 180).
-specialattack(pikachu, 300). specialattack(electrode, 220). specialattack(magneton, 220).
-specialattack(pidgey, 300). specialattack(spearow, 180). specialattack(zubat, 240).
+specialattack(bulbasaur, 300, leaf_blade). specialattack(oddish, 180, fire_bomb). specialattack(gloom, 240, water_magic).
+specialattack(charmander, 300, leaf_blade). specialattack(flareon, 240, fire_bomb). specialattack(magmar, 180, water_magic).
+specialattack(squirtle, 300, leaf_blade). specialattack(magikarp, 220, fire_bomb). specialattack(horsea, 220, water_magic).
+specialattack(sandshrew, 300, leaf_blade). specialattack(diglett, 240, fire_bomb). specialattack(geodude, 180, water_magic).
+specialattack(pikachu, 300, leaf_blade). specialattack(electrode, 220, fire_bomb). specialattack(magneton, 220, water_magic).
+specialattack(pidgey, 300, leaf_blade). specialattack(spearow, 180, fire_bomb). specialattack(zubat, 240, water_magic).
 % Legendary Pokemon
-specialattack(zapdos, 600). specialattack(moltres, 600). specialattack(articuno, 600).
+specialattack(zapdos, 600, legendary_blade). specialattack(moltres, 600, legendary_bomb). specialattack(articuno, 600, legendary_magic).
 
 % ----------------------------------
 % VARIASI MAX HEALTH
