@@ -1,3 +1,6 @@
+:- include('map.pl').
+:- dynamic(play/1).
+
 % FAKTA
 
 % VARIASI
@@ -116,31 +119,40 @@ specialattack(zapdos, 600, legendary_blade). specialattack(moltres, 600, legenda
 
 % ----------------------------------
 % VARIASI MAX HEALTH
-maxhealt(articuno,1000).
-maxhealt(moltres,1500).
-maxhealt(zapdos,2000).
-maxhealt(pikachu,500).
-maxhealt(squirtle,400).
-maxhealt(sandshrew,550).
-maxhealt(charmander,700).
-maxhealt(pidgey,450).
-maxhealt(flareon,600).
-maxhealt(magikarp,400).
-maxhealt(diglett,500).
-maxhealt(electrode,450).
-maxhealt(spearow,550).
-maxhealt(gl0om,400).
-maxhealt(magmar,650).
-maxhealt(horsea,500).
-maxhealt(geodude,650).
-maxhealt(magneton,750).
-maxhealt(zubat,450).
-maxhealt(bulbasaur,600).
-maxhealt(oddish,500).
+maxhealth(articuno,1000).
+maxhealth(moltres,1500).
+maxhealth(zapdos,2000).
+maxhealth(pikachu,500).
+maxhealth(squirtle,400).
+maxhealth(sandshrew,550).
+maxhealth(charmander,700).
+maxhealth(pidgey,450).
+maxhealth(flareon,600).
+maxhealth(magikarp,400).
+maxhealth(diglett,500).
+maxhealth(electrode,450).
+maxhealth(spearow,550).
+maxhealth(gloom,400).
+maxhealth(magmar,650).
+maxhealth(horsea,500).
+maxhealth(geodude,650).
+maxhealth(magneton,750).
+maxhealth(zubat,450).
+maxhealth(bulbasaur,600).
+maxhealth(oddish,500).
 
 % ----------------------------------
+%set play to false
+play(false).
 
-start :- printheader, printhelp, printlegend.
+start :- play(true), write('Anda sudah berada di dalam permainan.'), !.
+start :-
+        play(false),
+
+	retract(play(false)),
+	asserta(play(true)),
+
+	printheader, printhelp, printlegend, makeMap, setMusuh.
 
 help :- printhelp.
 
@@ -177,7 +189,7 @@ printheader :-
     write('Labtek 5! You can catch them all to get stronger, but what I am      '), nl,
     write('really interested in are the 3 legendary Tokemons, Zapdos, Moltres,  '), nl,
     write('and Articuno. If you can defeat or capture all those Tokemons I      '), nl,
-    write('will not kill you.				                        '), nl.
+    write('will not kill you.'), nl.
 
 printhelp :-
     write('Available commands:'),nl,
@@ -198,3 +210,26 @@ printlegend :-
     write('   - P = Player '),nl,
     write('   - G = Gym    '),nl,
     nl.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
