@@ -1,3 +1,6 @@
+:- include('map.pl').
+:- dynamic(play/1).
+
 % FAKTA
 
 % VARIASI
@@ -129,7 +132,7 @@ maxhealt(magikarp,400).
 maxhealt(diglett,500).
 maxhealt(electrode,450).
 maxhealt(spearow,550).
-maxhealt(gl0om,400).
+maxhealt(gloom,400).
 maxhealt(magmar,650).
 maxhealt(horsea,500).
 maxhealt(geodude,650).
@@ -139,8 +142,17 @@ maxhealt(bulbasaur,600).
 maxhealt(oddish,500).
 
 % ----------------------------------
+%set play to false
+play(false).
 
-start :- printheader, printhelp, printlegend.
+start :- play(true), write('Anda sudah berada di dalam permainan.'), !.
+start :-
+        play(false),
+
+	retract(play(false)),
+	asserta(play(true)),
+
+	printheader, printhelp, printlegend, makeMap, setMusuh.
 
 help :- printhelp.
 
@@ -198,3 +210,26 @@ printlegend :-
     write('   - P = Player '),nl,
     write('   - G = Gym    '),nl,
     nl.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
