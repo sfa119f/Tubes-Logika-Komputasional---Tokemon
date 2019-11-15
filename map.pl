@@ -4,18 +4,18 @@
 :- dynamic(player/2).
 
 
-makeMap(Panjang,Lebar) :-
+makeMap :-
 	random(10,20,Panjang),
 	random(10,20,Lebar),
 	asserta(panjangPeta(Panjang)),
 	asserta(lebarPeta(Lebar)),
         !,
-	random(10,Panjang,X),
-	random(10,Lebar,Y),
+	random(1,Panjang,X),
+	random(1,Lebar,Y),
 	asserta(gym(X,Y)),
 	!,
-	random(10,Panjang,A),
-	random(10,Lebar,B),
+	random(1,Panjang,A),
+	random(1,Lebar,B),
 	asserta(player(A,B)),
 	!.
 
@@ -91,10 +91,7 @@ w :- player(X,Y), Xa is X-1, isBorderKiri(Xa,Y), write('Pagar bro'), !.
 w :- player(X,Y), Xa is X-1, gym(A,B), Xa \== A, Y \== B, retractall(player(_,_)), asserta(player(Xa, Y)), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
 w :- player(X,Y), Xa is X-1, gym(A,_), Xa \== A, retractall(player(_,_)), asserta(player(Xa, Y)), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
 w :- player(X,Y), Xa is X-1, gym(_,B), Y \== B, retractall(player(_,_)), asserta(player(Xa, Y)), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
-w :- player(X,Y), Xa is X-1, gym(A,B), Xa =:= A, Y =:= B, retractall(player(_,_)), asserta(player(Xa, Y)), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
-
-
-
+w :- player(X,Y), Xa is X-1, gym(A,B), Xa =:= A, Y =:= B, retractall(player(_,_)), asserta(player(Xa, Y)), write('Anda bergerak ke Barat, anda berada pada Gym.'), !.
 
 
 
