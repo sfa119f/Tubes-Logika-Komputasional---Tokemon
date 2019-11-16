@@ -142,15 +142,15 @@ printposisi :-
 	musuh(Obj,[A,B]),
 	write(Obj).
 
-:- dynamic(acak/1).
+:- dynamic(acakrun/1).
 peluangRun :- random(0,1,A),
-	assert(acak(A)).
+	assert(acakrun(A)).
 
 run :-
 	battle(pending),
 
 	peluangRun,
-	acak(A),
+	acakrun(A),
 	A =:= 0,
 
 	retract(battle(_)),
@@ -168,7 +168,7 @@ run :-
 	battle(pending),
 
 	peluangRun,
-	acak(A),
+	acakrun(A),
 	A =:= 1,
 
 	retract(battle(_)),

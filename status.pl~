@@ -1,7 +1,7 @@
 :- dynamic(inventory/1).
 :- dynamic(legend/1).
-:- dynamic(healthP/2).
-:- dynamic(healthM/2).
+:- dynamic(healt/2).
+:- dynamic(type/2).
 status :-
 	write('YOUR TOKEMON :'), nl,
 	forall(

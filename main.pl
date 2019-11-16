@@ -1,4 +1,9 @@
+:- include('status.pl').
 :- include('map.pl').
+:- include('heal.pl').
+:- include('pick.pl').
+:- include('capture.pl').
+:- include('drop.pl').
 :- dynamic(play/1).
 
 % FAKTA

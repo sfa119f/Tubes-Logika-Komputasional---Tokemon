@@ -22,13 +22,14 @@ capture:-
 capture:-
 	jumInv(X),
 	Xn is X+1,
+	retract((jumInv,_)),
 	asserta(jumInv(Xn)),
 	player([A,B]),
 	musuh(Obj,[A,B]),
 	asserta(inventory(Obj)),
-	maxhealth(Obj,A),
+	healthM(Obj,A),
 	asserta(healthP(Obj,A)),
-	asserta(pernah(Obj,0),
+	write(Obj), write(' berhasil ditangkap, YEAY!!'),
 	nl,!.
 
 
