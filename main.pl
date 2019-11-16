@@ -156,6 +156,22 @@ start :-
 
 	retract(play(false)),
 	asserta(play(true)),
+	asserta(isHeal(false)),
+	asserta(jumInv(1)),
+
+	asserta(inventory(pikachu)),
+	maxhealth(pikachu,A),
+	asserta(healthP(pikachu,A)),
+
+	asserta(legend(zapdos)),
+	maxhealth(zapdos,X),
+	asserta(healthM(zapdos,X)),
+	asserta(legend(moltres)),
+	maxhealth(moltres,Y),
+	asserta(healthM(moltres,Y)),
+	asserta(legend(articuno)),
+	maxhealth(articuno,Z),
+	asserta(healthM(articuno,Z)),
 
 	printheader, printhelp, printlegend, makeMap, setMusuh.
 

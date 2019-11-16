@@ -13,13 +13,14 @@ pick(Obj) :-
 	battle(true),
 	write('Player: " '),write('Keluarlah '),write(Obj),write(' !"'),nl,nl,
 	write(Obj),nl,
-	health(Obj,X),write('Health: '),write(X),nl,
+	healthP(Obj,X),write('Health: '),write(X),nl,
 	type(Obj,Y),write('Type: '),write(Y),nl,nl,
 	player([A,B]),
 	musuh(Msh,[A,B]),
 	write(Msh),nl,
-	maxhealth(Msh,X),write('Health: '),write(X),nl,
+	healthM(Msh,X),write('Health: '),write(X),nl,
 	type(Msh,Y),write('Type: '),write(Y),nl,
 	nl,!.
+
 
 

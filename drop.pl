@@ -6,6 +6,7 @@ drop(Obj):-
 	\+inventory(Obj),!,write('Kamu tidak punya '),write(Obj),write(' di inventorymu'),
 	nl,!.
 drop(Obj):-
-	retrect(inventory(Obj)),
-	retrect(healthP(Obj,_)),
+	retract(inventory(Obj)),
+	retract(healthP(Obj,_)),
+	write('Sayang sekali, Tokemon '),write(Obj),write(' telah dilepaskan'),
 	nl,!.

@@ -1,3 +1,5 @@
+:- dynamic(jumInv/1).
+
 capture:-
 	play(false),
 	write('Game belum dimulai'), nl,
@@ -27,7 +29,7 @@ capture:-
 	player([A,B]),
 	musuh(Obj,[A,B]),
 	asserta(inventory(Obj)),
-	healthM(Obj,A),
+	maxhealth(Obj,A),
 	asserta(healthP(Obj,A)),
 	write(Obj), write(' berhasil ditangkap, YEAY!!'),
 	nl,!.

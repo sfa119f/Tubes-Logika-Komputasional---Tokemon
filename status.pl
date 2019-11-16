@@ -9,7 +9,7 @@ status :-
 		(
 			write(Obj), nl,
 			healthP(Obj,X),write('Health : '),write(X),nl,
-			type(Obj,X),write('Type   : '),nl,nl
+			type(Obj,Y),write('Type   : '),write(Y),nl,nl
 		)
 	),
 	nl,
@@ -19,7 +19,7 @@ status :-
 		(
 			write(Msh), nl,
 			healthM(Msh,X),write('Health : '),write(X),nl,
-			type(Msh,X),write('Type   : '),nl,nl
+			type(Msh,Y),write('Type   : '),write(Y),nl,nl
 		)
 	),
 	nl,!.
