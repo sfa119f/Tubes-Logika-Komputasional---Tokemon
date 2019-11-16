@@ -23,6 +23,6 @@ heal(obj) :- retract(healt(obj,Y)),
 	    maxhealt(obj,Z), 
             newY is Z, 
 	    asserta(obj,newY),
-	    pernah(obj,d),
-	    d is 1.
+	    retract(pernah(obj,d)),
+	    asserta(pernah(Obj,1),!.
 		    
