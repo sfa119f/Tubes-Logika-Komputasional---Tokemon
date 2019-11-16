@@ -1,5 +1,6 @@
 :- dynamic(play/1).
 :- dynamic(battle/1).
+:- dynamic(healt/2).
 play(false).
 battle(false).
 pick(_) :-
@@ -17,7 +18,7 @@ pick(Obj) :-
 	battle(true),
 	write('Player: " '),write('Keluarlah '),write(Obj),write(' !"'),nl,nl,
 	write(Obj),nl,
-	maxhealth(Obj,X),write('Health: '),write(X),nl,
+	health(Obj,X),write('Health: '),write(X),nl,
 	type(Obj,Y),write('Type: '),write(Y),nl,nl,
 	player([A,B]),
 	musuh(Msh,[A,B]),
