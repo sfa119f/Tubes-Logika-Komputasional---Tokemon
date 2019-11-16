@@ -28,6 +28,7 @@ capture:-
 	asserta(inventory(Obj)),
 	maxhealth(Obj,A),
 	asserta(healthP(Obj,A)),
+	asserta(pernah(Obj,d), d is 0,
 	nl,!.
 
 
