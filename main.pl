@@ -223,15 +223,17 @@ printlegend :-
 
 menang :-
 	play(true),
-	asserta(menang(true)),
 	write('Congratulation!!! You have helped me in defeating or capturing the
-3 Legendary Tokemons. As promised, I won’t kill you and you’re free!'),!.
+3 Legendary Tokemons. As promised, I won’t kill you and you’re free!'),
+	nl, nl, quit,
+	!.
 
 kalah :-
 	play(true),
-	asserta(kalah(true)),
 	write('Ho ho ho. You have failed to complete the missions. As for now,
-meet your fate and disappear from this world!'), !.
+meet your fate and disappear from this world!'),
+	nl, nl, quit,
+	!.
 
 quit :-
 	play(false),

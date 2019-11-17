@@ -8,5 +8,9 @@ drop(Obj):-
 drop(Obj):-
 	retract(inventory(Obj)),
 	retract(healthP(Obj,_)),
+	jumInv(X),
+	Xn is X-1,
+	retract(jumInv(_)),
+	asserta(jumInv(Xn)),
 	write('Sayang sekali, Tokemon '),write(Obj),write(' telah dilepaskan'),
 	nl,!.
