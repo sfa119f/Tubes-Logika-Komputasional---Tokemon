@@ -158,16 +158,15 @@ playerKalah(X) :-
 		), !.
 
 musuhKalah(Enemy) :-
-		dropM(Enemy),
 		(jenis(Enemy,legendary) ->
 			jumLegend(A),
-			((A =:= 0) ->
+			Ax is A-1,
+			((Ax =:= 0) ->
 				menang, !; !
 			); !
 		),
 		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
 		write(Enemy), write(' , otherwise move away.'),
-
 		retract(battle(true)),
 		asserta(battle(false)), !.
 			

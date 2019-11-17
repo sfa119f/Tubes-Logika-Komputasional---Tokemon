@@ -144,6 +144,7 @@ n :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 n :- player([X,Y]), Ya is Y-1, isBorderAtas(X,Ya), write('Pagar bro'), !.
 n :- player([X,Y]), Ya is Y-1, gym([A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada Gym.'), !.
 n :- player([X,Y]), Ya is Y-1, musuh(_,[A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('A wild Tokemon appears'), nl, write('Fight or Run?'), retract(battle(false)), asserta(battle(pending)), !.
+n :- player([X,Y]), Ya is Y-1, musuh(Obj,[X,Y]), dropM(Obj), retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'), !.
 n :- player([X,Y]), Ya is Y-1, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'), !.
 
 % 2. South (Bawah)
@@ -153,6 +154,7 @@ s :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 s :- player([X,Y]), Ya is Y+1, isBorderBawah(X,Ya), write('Pagar bro'), !.
 s :- player([X,Y]), Ya is Y+1, gym([A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada Gym.'), !.
 s :- player([X,Y]), Ya is Y+1, musuh(_,[A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('A wild Tokemon appears'), nl, write('Fight or Run?'), retract(battle(false)), asserta(battle(pending)), !.
+s :- player([X,Y]), Ya is Y+1, musuh(Obj,[X,Y]), dropM(Obj), retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'), !.
 s :- player([X,Y]), Ya is Y+1, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'), !.
 
 % 3. East (Kanan)
@@ -162,6 +164,7 @@ e :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 e :- player([X,Y]), Xa is X+1, isBorderKanan(Xa,Y), write('Pagar bro'), !.
 e :- player([X,Y]), Xa is X+1, gym([A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada Gym.'), !.
 e :- player([X,Y]), Xa is X+1, musuh(_,[A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('A wild Tokemon appears'), nl, write('Fight or Run?'),  retract(battle(false)), asserta(battle(pending)), !.
+e :- player([X,Y]), Xa is X+1, musuh(Obj,[X,Y]), dropM(Obj), retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'), !.
 e :- player([X,Y]), Xa is X+1, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'), !.
 
 % 4. West (Kiri)
@@ -171,6 +174,7 @@ w :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 w :- player([X,Y]), Xa is X-1, isBorderKiri(Xa,Y), write('Pagar bro'), !.
 w :- player([X,Y]), Xa is X-1, gym([A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada Gym.'), !.
 w :- player([X,Y]), Xa is X-1, musuh(_,[A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('A wild Tokemon appears'), nl, write('Fight or Run?'), retract(battle(false)), asserta(battle(pending)), !.
+w :- player([X,Y]), Xa is X-1, musuh(Obj,[X,Y]), dropM(Obj), retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
 w :- player([X,Y]), Xa is X-1, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
 
 %coba-coba
