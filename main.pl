@@ -161,9 +161,9 @@ start :-
 
 	retract(play(false)),
 	asserta(play(true)),
-
+	
 	setFalseDone,
-
+	
 	setInvLgd, makeMap, setMusuhBiasa, setMusuhLegend,
 	printheader, printhelp, printlegend.
 
