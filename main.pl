@@ -1,4 +1,5 @@
 :- include('attack.pl').
+:- include('specialattack.pl').
 :- include('status.pl').
 :- include('map.pl').
 :- include('set.pl').
@@ -117,12 +118,12 @@ attack(pidgey, 200). attack(spearow, 80). attack(zubat, 140).
 attack(zapdos, 400). attack(moltres, 400). attack(articuno, 400).
 
 % b. Special Attack
-specialattack(bulbasaur, 300, leaf_blade). specialattack(oddish, 180, fire_bomb). specialattack(gloom, 240, water_magic).
-specialattack(charmander, 300, leaf_blade). specialattack(flareon, 240, fire_bomb). specialattack(magmar, 180, water_magic).
-specialattack(squirtle, 300, leaf_blade). specialattack(magikarp, 220, fire_bomb). specialattack(horsea, 220, water_magic).
-specialattack(sandshrew, 300, leaf_blade). specialattack(diglett, 240, fire_bomb). specialattack(geodude, 180, water_magic).
-specialattack(pikachu, 300, leaf_blade). specialattack(electrode, 220, fire_bomb). specialattack(magneton, 220, water_magic).
-specialattack(pidgey, 300, leaf_blade). specialattack(spearow, 180, fire_bomb). specialattack(zubat, 240, water_magic).
+specialattack(bulbasaur, 300, leaf_blade). specialattack(oddish, 180, chlorophyll). specialattack(gloom, 240, stench).
+specialattack(charmander, 300, fire_bomb). specialattack(flareon, 240, flash_fire). specialattack(magmar, 180, flame_body).
+specialattack(squirtle, 300, water_canon). specialattack(magikarp, 220, swift_swim). specialattack(horsea, 220, dance_water).
+specialattack(sandshrew, 300, slush_rush). specialattack(diglett, 240, magic_ground). specialattack(geodude, 180, earthquake).
+specialattack(pikachu, 300, lightning_rod). specialattack(electrode, 220, soundproof). specialattack(magneton, 220, magnet_pull).
+specialattack(pidgey, 300, tangled_feet). specialattack(spearow, 180, sniper). specialattack(zubat, 240, infiltrator).
 % Legendary Pokemon
 specialattack(zapdos, 600, legendary_blade). specialattack(moltres, 600, legendary_bomb). specialattack(articuno, 600, legendary_magic).
 
@@ -156,7 +157,7 @@ play(false).
 
 start :- play(true), write('Anda sudah berada di dalam permainan.'), !.
 start :-
-        play(false),
+    play(false),
 
 	retract(play(false)),
 	asserta(play(true)),
@@ -225,46 +226,55 @@ menang :-
 	play(true),
 	write('Congratulation!!! You have helped me in defeating or capturing the
 3 Legendary Tokemons. As promised, I won’t kill you and you’re free!'),
-	nl, nl, quit,
+	nl, nl, keluar,
 	!.
 
 kalah :-
 	play(true),
 	write('Ho ho ho. You have failed to complete the missions. As for now,
 meet your fate and disappear from this world!'),
-	nl, nl, quit,
+	nl, nl, keluar,
 	!.
+
+keluar :-
+	
+	retractall(jumInv(_)),
+	retractall(inventory(_)),
+	retractall(healthP(_,_)),
+	
+	retractall(jumMusuh(_)),
+	retractall(jumLegend(_)),
+	retractall(legend(_)),
+	retractall(healthM(_,_)),
+	
+	retractall(player(_)),
+	retractall(musuh(_,_)),
+	retractall(panjangPeta(_)),
+	retractall(lebarPeta(_)),
+	retractall(gym(_)),
+	retractall(battle(_)),
+	
+	retractall(isHeal(_)),
+	
+	retractall(acakrun(_)),
+	
+	retract(play(true)),
+	asserta(play(false)),
+
+
+	nl, !.
+
+
 
 quit :-
 	play(false),
 	write('Game aja belum mulai, udah mau keluar aja'),
 	nl,!.
+
 quit :-
-	retract(jumInv(_)),
-	retract(inventory(_)),
-	retract(healthP(_,_)),
-
-	retract(jumMusuh(_)),
-	retract(jumLegend(_)),
-	retract(legend(_)),
-	retract(healthM(_,_)),
-
-	retract(player(_)),
-	retract(musuh(_,_)),
-	retract(panjangPeta(_)),
-	retract(lebarPeta(_)),
-	retract(gym(_)),
-	retract(battle(_)),
-
-	retract(isHeal(_)),
-
-	retract(acakrun(_)),
-
-	retract(play(true)),
-	asserta(play(false)),
-
-	write('Kamu keluar dari pemainan ini.'),
-	nl,!.
+	keluar,
+	write('Kamu keluar dari pemainan ini.'), !.
+		
 
 
 

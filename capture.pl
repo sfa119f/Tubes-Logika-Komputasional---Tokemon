@@ -6,24 +6,32 @@ capture:-
 	play(false),
 	write('Game belum dimulai'), nl,
 	nl,!.
+	
 capture:-
+	play(true),
 	player([A,B]),
 	musuh(_,[X,Y]),
 	A\==X, B\==Y,
 	write('Tidak ada musuh yang dicapture.'),
 	nl,!.
+	
 capture:-
+	play(true),
 	player([A,B]),
 	musuh(Obj,[A,B]),
 	healthM(Obj,X),
-	X\==0,
+	X=<0,
 	write('Musuh belum menyerah, lawan dulu dong!'),
 	nl,!.
+
 capture:-
+	play(true),
 	jumInv(X),X=:=6,
 	write('Inventory penuh, drop inventory duls.'),
 	nl,!.
+	
 capture:-
+	play(true),
 	jumInv(X),
 	Xn is X+1,
 	retract(jumInv(_)),
@@ -35,23 +43,24 @@ capture:-
 	    jenis(Obj,legendary)->
 	    jumLegend(Y),
 	    Yn is Y-1,
-	    retract(jumLegend(_)),
+	    retractall(jumLegend(_)),
 	    asserta(jumLegend(Yn))
 	    ;
 	    !
 	),
 	jumMusuh(Z),
 	Zn is Z+1,
-	retract(jumMusuh(_)),
+	retractall(jumMusuh(_)),
 	asserta(jumMusuh(Zn)),
-
+	
+	retractall(doneAttack(_)),
+	asserta(doneAttack(false)),
+	
 	asserta(inventory(Obj)),
 	maxhealth(Obj,A),
 	asserta(healthP(Obj,A)),
 	write(Obj), write(' berhasil ditangkap, YEAY!!'),
-	nl,!.
-
-
+	nl, dropM(Obj), !.
 
 
 
