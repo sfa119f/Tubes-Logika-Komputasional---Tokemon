@@ -162,8 +162,6 @@ start :-
 	retract(play(false)),
 	asserta(play(true)),
 
-	setFalseDone,
-
 	setInvLgd, makeMap, setMusuhBiasa, setMusuhLegend,
 	printheader, printhelp, printlegend.
 
@@ -239,27 +237,27 @@ meet your fate and disappear from this world!'),
 	!.
 
 keluar :-
-
+	
 	retractall(jumInv(_)),
 	retractall(inventory(_)),
 	retractall(healthP(_,_)),
-
+	
 	retractall(jumMusuh(_)),
 	retractall(jumLegend(_)),
 	retractall(legend(_)),
 	retractall(healthM(_,_)),
-
+	
 	retractall(player(_)),
 	retractall(musuh(_,_)),
 	retractall(panjangPeta(_)),
 	retractall(lebarPeta(_)),
 	retractall(gym(_)),
 	retractall(battle(_)),
-
+	
 	retractall(isHeal(_)),
-
+	
 	retractall(acakrun(_)),
-
+	
 	retract(play(true)),
 	asserta(play(false)),
 
@@ -276,7 +274,7 @@ quit :-
 quit :-
 	keluar,
 	write('Kamu keluar dari pemainan ini.'), !.
-
+		
 
 
 
