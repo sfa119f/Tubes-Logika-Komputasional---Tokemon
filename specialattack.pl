@@ -8,8 +8,8 @@ setTrueDone :-
 	asserta(doneAttack(true)), !.
 
 setFalseDone :-
-	retract(doneAttack(false)),
-	asserta(doneAttack(true)), !.
+	retract(doneAttack(true)),
+	asserta(doneAttack(false)), !.
 	
 specialAttack :-
 	play(false),
