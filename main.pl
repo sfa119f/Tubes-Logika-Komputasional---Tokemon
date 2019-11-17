@@ -180,7 +180,7 @@ start :-
 	maxhealth(articuno,Z),
 	asserta(healthM(articuno,Z)),
 
-	printheader, printhelp, printlegend, makeMap, setMusuh.
+	printheader, printhelp, printlegend, makeMap, setMusuhBiasa, setMusuhLegend.
 
 help :- printhelp.
 

@@ -2,8 +2,7 @@
 :- dynamic(lebarPeta/1).
 :- dynamic(gym/1).            %gym([X,Y])
 :- dynamic(player/1).         %player([X,Y])
-:- dynamic(musuhLegend/2).    %musuh(nama,[X,Y])
-:- dynamic(musuh/2).
+:- dynamic(musuh/2).    %musuh(nama,[X,Y])
 :- dynamic(battle/1).
 
 makeMap :-
@@ -23,20 +22,50 @@ makeMap :-
 	asserta(player([A,B])),
 	!.
 
-setMusuh :-
+/* Nomor Tokemon (Untuk Random) */
+nomor(bulbasaur,1). nomor(oddish,2). nomor(gloom,3).
+nomor(charmander,4). nomor(flareon,5). nomor(magmar,6).
+nomor(squirtle,7). nomor(magikarp,8). nomor(horsea,9).
+nomor(sandshrew,10). nomor(diglett,11). nomor(geodude,12).
+nomor(pikachu,13). nomor(electrode,14). nomor(magneton,15).
+nomor(pidgey,16). nomor(spearow,17). nomor(zubat,18).
+
+setMusuhBiasa :-
 	panjangPeta(Panjang),
 	lebarPeta(Lebar),
 	random(1,Panjang,A),
 	random(1,Lebar,B),
-	asserta(musuhLegend(zapdos,[A,B])),
+	random(1,18,Musuh),
+	nomor(X,Musuh),
+	asserta(musuh(X,[A,B])),
 	!,
 	random(1,Panjang,C),
 	random(1,Lebar,D),
-	asserta(musuhLegend(moltres,[C,D])),
+	random(1,18,Musuh),
+	nomor(Y,Musuh),
+	asserta(musuh(Y,[C,D])),
 	!,
 	random(1,Panjang,E),
 	random(1,Lebar,F),
-	asserta(musuhLegend(articuno,[E,F])),
+	random(1,18,Musuh),
+	nomor(Z,Musuh),
+	asserta(musuh(Z,[E,F])),
+	!.
+	
+setMusuhLegend :-
+	panjangPeta(Panjang),
+	lebarPeta(Lebar),
+	random(1,Panjang,A),
+	random(1,Lebar,B),
+	asserta(musuh(zapdos,[A,B])),
+	!,
+	random(1,Panjang,C),
+	random(1,Lebar,D),
+	asserta(musuh(moltres,[C,D])),
+	!,
+	random(1,Panjang,E),
+	random(1,Lebar,F),
+	asserta(musuh(articuno,[E,F])),
 	!.
 
 map :- play(false), write('start dulu wkwk'), !.
