@@ -10,7 +10,7 @@ fight :-
 	printInventory,
 	!.
 
-peluangRun :- random(0,4,A),
+peluangRun :- random(0,2,A),
 	assert(acakrun(A)),!.
 
 run :- battle(false), write('Anda tidak bertemu musuh.'),!.
@@ -45,7 +45,7 @@ run :-
 	retract(battle(_)),
 	assert(battle(false)),
 
-	write('You succesfully escaped the Tokemon.'),
+	write('You succesfully escaped the Tokemon.'), nl,
 	!.
 
 printInventory :-
@@ -61,13 +61,13 @@ printInventory :-
 printStatusAttack(Player, Enemy) :-
     inventory(Player),
     write(Player), nl,
-    healthP(Player,X),write('Health : '),write(X),nl,
-    type(Player,X),write('Type   : '),nl,nl,
+    healthP(Player,XP),write('Health : '),write(XP),nl,
+    type(Player,YP),write('Type   : '),write(YP), nl,
 	nl,
-    legend(Enemy),
+    musuh(Enemy,_),
     write(Enemy), nl,
-    healthM(Enemy,X),write('Health : '),write(X),nl,
-    type(Enemy,X),write('Type   : '),nl,nl,
+    healthM(Enemy,XM),write('Health : '),write(XM),nl,
+    type(Enemy,YM),write('Type   : '), write(YM), nl,
 	nl,!.
 
 
@@ -87,61 +87,90 @@ pattackLebih(X,Enemy) :-
 	 DamagePNew is DamageP*3/2,
 	 write('You dealt '), write(DamagePNew), write(' damage to '), write(Enemy), nl,
 	 updateHealthMusuh(Enemy,DamagePNew),
-	 printStatusAttack(X,Enemy), !.
+	 healthM(Enemy,Darah),
+	 ( Darah =< 0 ->
+			musuhKalah(Enemy), !;
+			printStatusAttack(X,Enemy),!)
+	 , !.
 
 pattackKurang(X,Enemy) :-
 	 attack(X,DamageP),
 	 DamagePNew is DamageP*1/2,
 	 write('You dealt '), write(DamagePNew), write(' damage to '), write(Enemy), nl,
 	 updateHealthMusuh(Enemy,DamagePNew),
-	 printStatusAttack(X,Enemy), !.
-
+	 healthM(Enemy,Darah),
+	 ( Darah =< 0 ->
+			musuhKalah(Enemy);
+			printStatusAttack(X,Enemy),!)
+	 , !.
+	 
 pattack(X,Enemy) :-
 	 attack(X,DamageP),
 	 write('You dealt '), write(DamageP), write(' damage to '), write(Enemy), nl,
 	 updateHealthMusuh(Enemy,DamageP),
-	 printStatusAttack(X,Enemy), !.
-
+	 healthM(Enemy,Darah),
+	 ( Darah =< 0 ->
+			musuhKalah(Enemy), !;
+			printStatusAttack(X,Enemy), !)
+	 , !.
+	 
 mattackLebih(X,Enemy) :-
 	write(Enemy), write(' attacks!'), nl,
 	attack(Enemy,DamageM),
 	DamageMNew is DamageM*3/2,
 	write('It dealts '), write(DamageMNew), write(' damage to '), write(X), nl,
 	updateHealth(X,DamageMNew),
-	printStatusAttack(X,Enemy), !.
-
+	healthP(X,Darah),
+	 ( Darah =< 0 ->
+			playerKalah(X), !;
+			printStatusAttack(X,Enemy), !)
+	 , !.
+	 
 mattackKurang(X, Enemy) :-
         write(Enemy), write(' attacks!'),nl,
         attack(Enemy,DamageM),
         DamageMNew is DamageM*1/2,
         write('It dealts '), write(DamageMNew), write(' damage to '), write(X), nl,
         updateHealth(X,DamageMNew),
-        printStatusAttack(X,Enemy), !.
+		healthP(X,Darah),
+		 ( Darah =< 0 ->
+				playerKalah(X), !;
+				printStatusAttack(X,Enemy), !)
+		 , !.
 
 mattack(X, Enemy) :-
         write(Enemy), write(' attacks!'),nl,
         attack(Enemy,DamageM),
         write('It dealts '), write(DamageM), write(' damage to '), write(X), nl,
         updateHealth(X,DamageM),
-        printStatusAttack(X,Enemy), !.
+		healthP(X,Darah),
+		 ( Darah =< 0 ->
+				playerKalah(X), !;
+				printStatusAttack(X,Enemy), !)
+		 , !.
+
+playerKalah(X) :-
+		dropP(X),
+		jumInv(B),
+		( (B =:= 0) ->
+				kalah, !;
+				write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), nl, nl, printInventory, !
+		), !.
 
 musuhKalah(Enemy) :-
-		jumMusuh(Jumlah), Hasil is Jumlah-1, retract(jumMusuh(_)), asserta(jumMusuh(Hasil)),
+		dropM(Enemy),
 		(jenis(Enemy,legendary) ->
-			jumLegend(Jum), Hsl is Jum-1, retract(jumLegend(_)), asserta(jumLegend(Hsl)),
-			( (Hsl =:= 0) ->
-				menang, !;
-				write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-				write(Enemy), write(' , otherwise move away.'),
-				retract(battle(true)),
-				asserta(battle(false)), !
-			), !;
-			write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-			write(Enemy), write(' , otherwise move away.'),
-			retract(battle(true)),
-			asserta(battle(false)), !			
-		),!.
+			jumLegend(A),
+			((A =:= 0) ->
+				menang, !; !
+			); !
+		),
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
 
+		retract(battle(true)),
+		asserta(battle(false)), !.
+			
 attack :- play(false), write('Start dulu'), !.
 attack :- battle(false), write('Anda tidak sedang dalam battle.'), !.
 attack :- battle(pending), write('Fight or Run?'),!.
@@ -156,21 +185,19 @@ attack :-
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, water),
-	healthP(X,P),
+    healthP(X,P),
     healthM(Enemy,M),
     (	(M > 0) ->
 			( (P > 0) ->
-		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				pattackLebih(X,Enemy),
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
-			), !;
+				playerKalah(X), !
+		), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
     ), !.
@@ -187,22 +214,20 @@ attack :-
     type(Enemy, ground),
 	healthP(X,P),
     healthM(Enemy,M),
-    (	(M > 0) ->
-			( (P > 0) ->
-		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
-				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+	( (M > 0) ->
+		( (P > 0) ->
+			pattackLebih(X,Enemy),
+			healthM(Enemy,HM),
+			(HM =< 0 ->
+				musuhKalah(Enemy), !;
+				mattackKurang(X,Enemy), !
 			), !;
-		/* Musuh Mati */
+			/* Pokemon Player Mati */			
+			playerKalah(X), !
+		), !;
+		/* Musuh Mati */		
 		musuhKalah(Enemy), !
-    ), !.
+	), !.
 
 /* 3. Leaves vs Fire */
 attack :-
@@ -219,15 +244,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -248,15 +271,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -278,15 +299,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -307,15 +326,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -337,15 +354,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -366,15 +381,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;				
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -395,15 +408,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -424,15 +435,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -453,15 +462,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -482,15 +489,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -511,15 +516,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -540,15 +543,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -569,15 +570,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -598,15 +597,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -627,15 +624,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -656,15 +651,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -685,15 +678,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -714,15 +705,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -743,15 +732,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -772,15 +759,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -801,15 +786,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -830,15 +813,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -859,15 +840,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -888,15 +867,14 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;				
 				mattack(X,Enemy), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -917,15 +895,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -946,15 +922,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -975,15 +949,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -1004,15 +976,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -1033,15 +1003,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -1062,15 +1030,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -1091,15 +1057,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -1120,15 +1084,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				mattack(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattack(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -1149,15 +1111,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				mattackLebih(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackLebih(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
@@ -1178,15 +1138,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				mattackKurang(X,Enemy), !;
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					musuhKalah(Enemy), !;
+					mattackKurang(X,Enemy), !
+				), !;
 				/* Pokemon Player Mati */
-				retract(inventory(X)),
-				retract(pickPokemon(_)),
-				jumInv(A), B is A-1, asserta(jumInv(B)),
-				( (B =:= 0) ->
-					kalah, !;
-					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
-				)
+				playerKalah(X), !
 			), !;
 		/* Musuh Mati */
 		musuhKalah(Enemy), !
