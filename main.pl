@@ -233,8 +233,36 @@ kalah :-
 	write('Ho ho ho. You have failed to complete the missions. As for now,
 meet your fate and disappear from this world!'), !.
 
+quit :-
+	play(false),
+	write('Game aja belum mulai, udah mau keluar aja'),
+	nl,!.
+quit :-
+	retract(jumInv(_)),
+	retract(inventory(_)),
+	retract(healthP(_,_)),
 
+	retract(jumMusuh(_)),
+	retract(jumLegend(_)),
+	retract(legend(_)),
+	retract(healthM(_,_)),
 
+	retract(player(_)),
+	retract(musuh(_,_)),
+	retract(panjangPeta(_)),
+	retract(lebarPeta(_)),
+	retract(gym(_)),
+	retract(battle(_)),
+
+	retract(isHeal(_)),
+
+	retract(acakrun(_)),
+
+	retract(play(true)),
+	asserta(play(false)),
+
+	write('Kamu keluar dari pemainan ini.'),
+	nl,!.
 
 
 
