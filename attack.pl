@@ -34,19 +34,19 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, water),
 
-    healthMusuh(Enemy,atr),
+    healthMusuh(Enemy,Atr),
     play(true),
-        atr > 0 ->
-            attack(X,damageP), %fakta attack dari main.pl
-            damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-            write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-            updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+        Atr > 0 ->
+            attack(X,DamageP), %fakta attack dari main.pl
+            DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+            write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+            updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
             printStatusAttack(X,Enemy), %print status tokemon dan enemy
             write(Enemy), write(' attacks!'),nl,
-            attack(Enemy,damageM), %fakta dari main.pl
-            damageMNew is damageM*1/2, %(water->leaves) damage lebih kecil 50% dari biasanya.
-            write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-            updateHealth(X, damageMNew), 
+            attack(Enemy,DamageM), %fakta dari main.pl
+            DamageMNew is DamageM*1/2, %(water->leaves) Damage lebih kecil 50% dari biasanya.
+            write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+            updateHealth(X, DamageMNew), 
             printStatusAttack(X,Enemy);
         %faint
         write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -62,18 +62,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, ground),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(ground->leaves) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(ground->leaves) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -89,18 +89,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, fire),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(fire->leaves) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(fire->leaves) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -116,18 +116,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, flying),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(flying->leaves) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(flying->leaves) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -143,18 +143,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, leaves),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(leaves->fire) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(leaves->fire) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -170,18 +170,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, water),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(water->fire) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(water->fire) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -197,18 +197,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, ground),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(ground->fire) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(ground->fire) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -224,18 +224,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, fire),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(water->leaves) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(water->leaves) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -251,18 +251,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, electric),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(electric->water) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(electric->water) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -278,18 +278,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, fire),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(fire->ground) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(fire->ground) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -305,18 +305,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, electric),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(electric->ground) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(electric->ground) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -332,18 +332,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, water),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(water->ground) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(water->ground) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -359,18 +359,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, leaves),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(leaves->ground) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(leaves->ground) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -386,18 +386,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, water),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(water->electric) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(water->electric) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -413,18 +413,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, flying),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(flying->electric) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(flying->electric) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -440,18 +440,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, ground),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(ground->electric) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(ground->electric) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -467,18 +467,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, leaves),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(leaves->flying) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*1/2, %(leaves->flying) Damage lebih kecil 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -494,18 +494,18 @@ attack(X, Enemy) :-
     musuh(Enemy, [A,B]),
     type(Enemy, electric),
 
-    healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+    healthMusuh(Enemy,Atr),
+    (Atr > 0) ->
+        attack(X,DamageP), %fakta attack dari main.pl
+        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
+        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
+        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
         printStatusAttack(X,Enemy), %print status tokemon dan enemy
         write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*3/2, %(electric->flying) damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
+        attack(Enemy,DamageM), %fakta dari main.pl
+        DamageMNew is DamageM*3/2, %(electric->flying) Damage lebih besar 50% dari biasanya.
+        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
+        updateHealth(X, DamageMNew), 
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
@@ -516,7 +516,7 @@ attack(X, Enemy) :-
 %     specialattack(X,Y),
 %     write(X),write (' uses '), write() , nl,
 %     write('It was super effective!'), nl,
-%     write('You dealt '), write(_), write(' damage to '), write %enemy
+%     write('You dealt '), write(_), write(' Damage to '), write %enemy
 %     update( ,_)
 %     printStatusAttack(X, ). %enemy
 
