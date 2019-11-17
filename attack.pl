@@ -1,4 +1,4 @@
-
+:- dynamic(acakrun/1).
 
 fight :- battle(false), write('Anda tidak bertemu musuh.'),!.
 fight :- battle(true), write('Anda sudah berada dalam battle.'),!.
@@ -10,7 +10,6 @@ fight :-
 	printInventory,
 	!.
 
-:- dynamic(acakrun/1).
 peluangRun :- random(0,4,A),
 	assert(acakrun(A)),!.
 
@@ -55,7 +54,7 @@ printInventory :-
 		  (
 			write('['),
 		        write(Obj),
-		        write(']')
+		        write('] ')
 		  )
 	).
 

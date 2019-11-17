@@ -2,7 +2,8 @@
 :- dynamic(lebarPeta/1).
 :- dynamic(gym/1).            %gym([X,Y])
 :- dynamic(player/1).         %player([X,Y])
-:- dynamic(musuh/2).          %musuh(nama,[X,Y])
+:- dynamic(musuhLegend/2).    %musuh(nama,[X,Y])
+:- dynamic(musuh/2).
 :- dynamic(battle/1).
 
 makeMap :-
@@ -27,15 +28,15 @@ setMusuh :-
 	lebarPeta(Lebar),
 	random(1,Panjang,A),
 	random(1,Lebar,B),
-	asserta(musuh(zapdos,[A,B])),
+	asserta(musuhLegend(zapdos,[A,B])),
 	!,
 	random(1,Panjang,C),
 	random(1,Lebar,D),
-	asserta(musuh(moltres,[C,D])),
+	asserta(musuhLegend(moltres,[C,D])),
 	!,
 	random(1,Panjang,E),
 	random(1,Lebar,F),
-	asserta(musuh(articuno,[E,F])),
+	asserta(musuhLegend(articuno,[E,F])),
 	!.
 
 map :- play(false), write('start dulu wkwk'), !.
@@ -92,7 +93,6 @@ printMap(X,Y) :-
 printMap(X,Y) :-
 	write(' - '), printMap(X+1,Y), !.
 
-%Definisi Awal, battle(false).
 battle(false).
 %battle(false) = Tidak berada di dalam battle.
 %battle(true) = Berada di dalam battle.
@@ -142,40 +142,6 @@ printposisi :-
 	musuh(Obj,[A,B]),
 	write(Obj).
 
-:- dynamic(acakrun/1).
-peluangRun :- random(0,1,A),
-	assert(acakrun(A)).
-
-run :-
-	battle(pending),
-
-	peluangRun,
-	acakrun(A),
-	A =:= 0,
-
-	retract(battle(_)),
-	assert(battle(true)),
-
-	write('You failed to run!'), nl,
-	write('Choose your Tokemon!'),nl,
-
-	write('Available Tokemons: ['),
-	forall(inventory(Obj),write(Obj,' ')),
-	write(']'),
-	!.
-
-run :-
-	battle(pending),
-
-	peluangRun,
-	acakrun(A),
-	A =:= 1,
-
-	retract(battle(_)),
-	assert(battle(false)),
-
-	write('You succesfully escaped the Tokemon.'),
-	!.
 
 
 

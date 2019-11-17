@@ -15,7 +15,7 @@ status :-
 	nl,
 	write('YOUR ENEMY :'),nl,
 	forall(
-	    legend(Msh),
+	    musuh(Msh,_),
 		(
 			write(Msh), nl,
 			healthM(Msh,X),write('Health : '),write(X),nl,

@@ -1,4 +1,5 @@
 :- dynamic(jumInv/1).
+:- dynamic(jumLegend/1).
 
 capture:-
 	play(false),
@@ -24,8 +25,14 @@ capture:-
 capture:-
 	jumInv(X),
 	Xn is X+1,
-	retract((jumInv,_)),
+	jumLegend(Y),
+	Yn is Y-1,
+
+	retract(jumInv(_)),
 	asserta(jumInv(Xn)),
+	retract(jumLegend(_)),
+	asserta(jumLegend(Yn)),
+
 	player([A,B]),
 	musuh(Obj,[A,B]),
 	asserta(inventory(Obj)),
@@ -33,6 +40,24 @@ capture:-
 	asserta(healthP(Obj,A)),
 	write(Obj), write(' berhasil ditangkap, YEAY!!'),
 	nl,!.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

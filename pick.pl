@@ -1,3 +1,5 @@
+:- dynamic(pickTokemon/1).
+
 pick(_) :-
 	play(false),
 	write('Game belum dimulai'),
@@ -11,6 +13,7 @@ pick(Obj) :-
 	nl,!.
 pick(Obj) :-
 	battle(true),
+	asserta(pickTokemon(Obj)),
 	write('Player: " '),write('Keluarlah '),write(Obj),write(' !"'),nl,nl,
 	write(Obj),nl,
 	healthP(Obj,X),write('Health: '),write(X),nl,
