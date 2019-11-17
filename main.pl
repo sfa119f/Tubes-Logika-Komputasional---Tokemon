@@ -227,7 +227,7 @@ printlegend :-
 menang :-
 	play(true),
 	write('Congratulation!!! You have helped me in defeating or capturing the
-3 Legendary Tokemons. As promised, I won’t kill you and you’re free!'),
+3 Legendary Tokemons. As promised, I wonÂ’t kill you and youÂ’re free!'),
 	nl, nl, keluar,
 	!.
 
@@ -276,7 +276,31 @@ quit :-
 quit :-
 	keluar,
 	write('Kamu keluar dari pemainan ini.'), !.
-
+	
+save(_) :-
+	play(false),
+	write('Apa yang mau di save? game nya aja belum mulai'),nl,!.
+save(Filename :-
+	tell(Filename),
+		player([A,B]),
+		lebarpeta(Lebar),
+		panjangpeta(Panjang),
+		gym([X,Y]),
+		forall(
+	    		inventory(Obj),),
+		forall(
+	    		legend(L),),!.
+Load(_) :-
+	play(true),
+	write('Kamu tidak bisa memulai game lainnya ketika ada game yang sudah dimulai.'), nl, !.
+loads(Filename):-
+	\+file_exists(Filename),
+	write('File tersebut tidak ada.'), nl, !.
+loads(FileName):-
+	open(FileName, read, Str),
+    	read_file_lines(Str,Lines),
+    	close(Str),
+    	assertaList(Lines), !.
 
 
 
