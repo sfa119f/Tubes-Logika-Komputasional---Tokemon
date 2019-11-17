@@ -125,6 +125,23 @@ mattack(X, Enemy) :-
         updateHealth(X,DamageM),
         printStatusAttack(X,Enemy), !.
 
+musuhKalah(Enemy) :-
+		jumMusuh(Jumlah), Hasil is Jumlah-1, retract(jumMusuh(_)), asserta(jumMusuh(Hasil)),
+		(jenis(Enemy,legendary) ->
+			jumLegend(Jum), Hsl is Jum-1, retract(jumLegend(_)), asserta(jumLegend(Hsl)),
+			( (Hsl =:= 0) ->
+				menang, !;
+				write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+				write(Enemy), write(' , otherwise move away.'),
+				retract(battle(true)),
+				asserta(battle(false)), !
+			), !;
+			write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+			write(Enemy), write(' , otherwise move away.'),
+			retract(battle(true)),
+			asserta(battle(false)), !			
+		),!.
+
 attack :- play(false), write('Start dulu'), !.
 attack :- battle(false), write('Anda tidak sedang dalam battle.'), !.
 attack :- battle(pending), write('Fight or Run?'),!.
@@ -155,10 +172,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 2. Leaves vs Ground */
@@ -187,10 +201,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 3. Leaves vs Fire */
@@ -219,10 +230,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 4. Leaves vs Flying */
@@ -251,10 +259,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 
@@ -284,10 +289,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 6. Leaves vs Electric */
@@ -316,10 +318,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 
@@ -349,10 +348,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 8. Fire vs Fire */
@@ -381,10 +377,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 9. Fire vs Water */
@@ -413,10 +406,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 10. Fire vs Ground */
@@ -445,10 +435,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 11. Fire vs Electric */
@@ -477,10 +464,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 12. Fire vs Flying */
@@ -509,10 +493,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 13. Water vs Leaves */
@@ -541,10 +522,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 14. Water vs Fire */
@@ -573,10 +551,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 15. Water vs Water */
@@ -605,10 +580,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 16. Water vs Ground */
@@ -637,10 +609,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 17. Water vs Electric */
@@ -669,10 +638,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 18. Water vs Flying */
@@ -701,10 +667,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 19. Ground vs Leaves */
@@ -733,10 +696,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 20. Ground vs Fire */
@@ -765,10 +725,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 21. Ground vs Water */
@@ -797,10 +754,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 22. Ground vs Ground */
@@ -829,10 +783,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 23. Ground vs Electric */
@@ -861,10 +812,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 24. Ground vs Flying */
@@ -893,10 +841,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 25. Electric vs Leaves */
@@ -925,10 +870,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 26. Electric vs Fire */
@@ -957,10 +899,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 27. Electric vs Water */
@@ -989,10 +928,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 28. Electric vs Ground */
@@ -1021,10 +957,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 29. Electric vs Electric */
@@ -1053,10 +986,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 30. Electric vs Flying */
@@ -1085,10 +1015,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 31. Flying vs Leaves */
@@ -1117,10 +1044,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 32. Flying vs Fire */
@@ -1149,10 +1073,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 33. Flying vs Water */
@@ -1181,10 +1102,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 34. Flying vs Ground */
@@ -1213,10 +1131,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 35. Flying vs Electric */
@@ -1245,10 +1160,7 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
 
 /* 36. Flying vs Flying */
@@ -1277,8 +1189,5 @@ attack :-
 				)
 			), !;
 		/* Musuh Mati */
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
-		write(Enemy), write(' , otherwise move away.'),
-		retract(battle(true)),
-		asserta(battle(false))
+		musuhKalah(Enemy), !
     ), !.
