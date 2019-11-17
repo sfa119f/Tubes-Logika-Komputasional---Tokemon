@@ -1,525 +1,1285 @@
 
 
+fight :- battle(false), write('Anda tidak bertemu musuh.'),!.
+fight :- battle(true), write('Anda sudah berada dalam battle.'),!.
+fight :-
+	battle(pending),
+
+	retract(battle(_)),
+	asserta(battle(true)),
+	printInventory,
+	!.
+
+:- dynamic(acakrun/1).
+peluangRun :- random(0,4,A),
+	assert(acakrun(A)),!.
+
+run :- battle(false), write('Anda tidak bertemu musuh.'),!.
+run :-
+	battle(true),
+	write('Anda sedang berada dalam battle'), nl,
+	write('Anda tidak bisa Run.'),!.
+
+run :-
+	battle(pending),
+
+	peluangRun,
+	acakrun(A),
+	A =:= 0,
+
+	retract(battle(_)),
+	assert(battle(true)),
+
+	write('You failed to run!'), nl,
+	write('Choose your Tokemon!'),nl,
+
+	printInventory,
+	!.
+
+run :-
+	battle(pending),
+
+	peluangRun,
+	acakrun(A),
+	A > 0,
+
+	retract(battle(_)),
+	assert(battle(false)),
+
+	write('You succesfully escaped the Tokemon.'),
+	!.
+
+printInventory :-
+	write('Available Tokemons: '),
+	forall(inventory(Obj),
+		  (
+			write('['),
+		        write(Obj),
+		        write(']')
+		  )
+	).
+
 printStatusAttack(Player, Enemy) :-
     inventory(Player),
     write(Player), nl,
-    health(Player,X),write('Health : '),write(X),nl,
+    healthP(Player,X),write('Health : '),write(X),nl,
     type(Player,X),write('Type   : '),nl,nl,
 	nl,
     legend(Enemy),
     write(Enemy), nl,
-    healthMusuh(Enemy,X),write('Health : '),write(X),nl,
+    healthM(Enemy,X),write('Health : '),write(X),nl,
     type(Enemy,X),write('Type   : '),nl,nl,
 	nl,!.
 
 
-%update health dengan x sebagai tokemon dan y sebagai serangan 
+%update health dengan x sebagai tokemon dan y sebagai serangan
 updateHealth(X,Y) :-
-    retract(health(X,Darah)),
+    retract(healthP(X,Darah)),
     Darahbaru is Darah-Y,
-    asserta(health(X, Darahbaru)).
+    asserta(healthP(X, Darahbaru)).
 
 updateHealthMusuh(X,Y) :-
-    retract(healthMusuh(X,Darah)),
+    retract(healthM(X,Darah)),
     Darahbaru is Darah-Y,
-    asserta(healthMusuh(X, Darahbaru)).
+    asserta(healthM(X, Darahbaru)).
 
-%attack leaves-water     
-attack(X, Enemy) :-
-    pick(X),
+pattackLebih(X,Enemy) :-
+	 attack(X,DamageP),
+	 DamagePNew is DamageP*3/2,
+	 write('You dealt '), write(DamagePNew), write(' damage to '), write(Enemy), nl,
+	 updateHealthMusuh(Enemy,DamagePNew),
+	 printStatusAttack(X,Enemy), !.
+
+pattackKurang(X,Enemy) :-
+	 attack(X,DamageP),
+	 DamagePNew is DamageP*1/2,
+	 write('You dealt '), write(DamagePNew), write(' damage to '), write(Enemy), nl,
+	 updateHealthMusuh(Enemy,DamagePNew),
+	 printStatusAttack(X,Enemy), !.
+
+pattack(X,Enemy) :-
+	 attack(X,DamageP),
+	 write('You dealt '), write(DamageP), write(' damage to '), write(Enemy), nl,
+	 updateHealthMusuh(Enemy,DamageP),
+	 printStatusAttack(X,Enemy), !.
+
+mattackLebih(X,Enemy) :-
+	write(Enemy), write(' attacks!'), nl,
+	attack(Enemy,DamageM),
+	DamageMNew is DamageM*3/2,
+	write('It dealts '), write(DamageMNew), write(' damage to '), write(X), nl,
+	updateHealth(X,DamageMNew),
+	printStatusAttack(X,Enemy), !.
+
+mattackKurang(X, Enemy) :-
+        write(Enemy), write(' attacks!'),nl,
+        attack(Enemy,DamageM),
+        DamageMNew is DamageM*1/2,
+        write('It dealts '), write(DamageMNew), write(' damage to '), write(X), nl,
+        updateHealth(X,DamageMNew),
+        printStatusAttack(X,Enemy), !.
+
+mattack(X, Enemy) :-
+        write(Enemy), write(' attacks!'),nl,
+        attack(Enemy,DamageM),
+        write('It dealts '), write(DamageM), write(' damage to '), write(X), nl,
+        updateHealth(X,DamageM),
+        printStatusAttack(X,Enemy), !.
+
+attack :- play(false), write('Start dulu'), !.
+attack :- battle(false), write('Anda tidak sedang dalam battle.'), !.
+attack :- battle(pending), write('Fight or Run?'),!.
+
+/* 1. Leaves vs Water */
+attack :-
+    battle(true),
+    pickTokemon(X),
     type(X, leaves),
 
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, water),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    play(true),
-        Atr > 0 ->
-            attack(X,DamageP), %fakta attack dari main.pl
-            DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-            write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-            updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-            printStatusAttack(X,Enemy), %print status tokemon dan enemy
-            write(Enemy), write(' attacks!'),nl,
-            attack(Enemy,DamageM), %fakta dari main.pl
-            DamageMNew is DamageM*1/2, %(water->leaves) Damage lebih kecil 50% dari biasanya.
-            write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-            updateHealth(X, DamageMNew), 
-            printStatusAttack(X,Enemy);
-        %faint
-        write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-        write(Enemy),write(', otherwise move away.)').
-
-%attack leaves-ground     
-attack(X, Enemy) :-
-    pick(X),
+/* 2. Leaves vs Ground */
+attack :-
+    battle(true),
+    pickTokemon(X),
     type(X, leaves),
 
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, ground),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(ground->leaves) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), write(', otherwise move away.)').
-
-%attack leaves-fire     
-attack(X, Enemy) :-
-    pick(X),
+/* 3. Leaves vs Fire */
+attack :-
+    battle(true),
+    pickTokemon(X),
     type(X, leaves),
 
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, fire),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(fire->leaves) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), write(', otherwise move away.)').
-
-%attack leaves-flying      
-attack(X, Enemy) :-
-    pick(X),
+/* 4. Leaves vs Flying */
+attack :-
+    battle(true),
+    pickTokemon(X),
     type(X, leaves),
 
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, flying),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(flying->leaves) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
 
-%attack fire-leaves   
-attack(X, Enemy) :-
-    pick(X),
-    type(X, fire),
+/* 5. Leaves vs Leaves */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, leaves),
 
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, leaves),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(leaves->fire) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
+/* 6. Leaves vs Electric */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, leaves),
 
-%attack fire-water    
-attack(X, Enemy) :-
-    pick(X),
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, electric),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+
+/* 7. Fire vs Leaves */
+attack :-
+    battle(true),
+    pickTokemon(X),
     type(X, fire),
 
-    %enemy 
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, leaves),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 8. Fire vs Fire */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, fire),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, fire),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 9. Fire vs Water */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, fire),
+
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, water),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(water->fire) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
-
-%attack fire-ground     
-attack(X, Enemy) :-
-    pick(X),
+/* 10. Fire vs Ground */
+attack :-
+    battle(true),
+    pickTokemon(X),
     type(X, fire),
 
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, ground),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(ground->fire) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
+/* 11. Fire vs Electric */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, fire),
 
-%attack water-fire     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, water),
-
-    %enemy 
-    player([A,B]),
-    musuh(Enemy, [A,B]),
-    type(Enemy, fire),
-
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(water->leaves) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
-
-%attack water-electric     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, water),
-
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, electric),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(electric->water) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
+/* 12. Fire vs Flying */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, fire),
 
-%attack ground-fire    
-attack(X, Enemy) :-
-    pick(X),
-    type(X, ground),
-
-    %enemy 
-    player([A,B]),
-    musuh(Enemy, [A,B]),
-    type(Enemy, fire),
-
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(fire->ground) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
-
-%attack ground-electric     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, ground),
-
-    %enemy 
-    player([A,B]),
-    musuh(Enemy, [A,B]),
-    type(Enemy, electric),
-
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(electric->ground) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
-
-%attack ground-water     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, ground),
-
-    %enemy 
-    player([A,B]),
-    musuh(Enemy, [A,B]),
-    type(Enemy, water),
-
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(water->ground) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
-
-%attack ground-leaves     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, ground),
-
-    %enemy 
-    player([A,B]),
-    musuh(Enemy, [A,B]),
-    type(Enemy, leaves),
-
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(leaves->ground) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
-
-%attack electric-water     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, electric),
-
-    %enemy 
-    player([A,B]),
-    musuh(Enemy, [A,B]),
-    type(Enemy, water),
-
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(water->electric) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy),write(', otherwise move away.)').
-
-%attack electric-flying     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, electric),
-
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, flying),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(flying->electric) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+/* 13. Water vs Leaves */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, water),
 
-%attack electric-ground     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, electric),
-
-    %enemy 
-    player([A,B]),
-    musuh(Enemy, [A,B]),
-    type(Enemy, ground),
-
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(ground->electric) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
-
-%attack flying-leaves     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, flying),
-
-    %enemy 
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, leaves),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*1/2, %(leaves->flying) Damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+/* 14. Water vs Fire */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, water),
 
-%attack flying-electric     
-attack(X, Enemy) :-
-    pick(X),
-    type(X, flying),
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, fire),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    %enemy 
+/* 15. Water vs Water */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, water),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, water),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 16. Water vs Ground */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, water),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, ground),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 17. Water vs Electric */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, water),
+
+    %enemy
     player([A,B]),
     musuh(Enemy, [A,B]),
     type(Enemy, electric),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    healthMusuh(Enemy,Atr),
-    (Atr > 0) ->
-        attack(X,DamageP), %fakta attack dari main.pl
-        DamagePNew is DamageP*1/2, %Damage lebih kecil 50% dari biasanya.
-        write('You dealt '), write(DamagePNew), write(' Damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,DamagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,DamageM), %fakta dari main.pl
-        DamageMNew is DamageM*3/2, %(electric->flying) Damage lebih besar 50% dari biasanya.
-        write('It dealts '), write(DamageMNew), write(' Damage to '), write(X), nl,
-        updateHealth(X, DamageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+/* 18. Water vs Flying */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, water),
 
-% specialAttack :-
-%     pick(X),
-%     specialattack(X,Y),
-%     write(X),write (' uses '), write() , nl,
-%     write('It was super effective!'), nl,
-%     write('You dealt '), write(_), write(' Damage to '), write %enemy
-%     update( ,_)
-%     printStatusAttack(X, ). %enemy
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, flying),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
-    
+/* 19. Ground vs Leaves */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, ground),
 
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, leaves),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
 
+/* 20. Ground vs Fire */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, ground),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, fire),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 21. Ground vs Water */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, ground),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, water),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 22. Ground vs Ground */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, ground),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, ground),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 23. Ground vs Electric */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, ground),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, electric),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 24. Ground vs Flying */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, ground),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, flying),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 25. Electric vs Leaves */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, electric),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, leaves),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 26. Electric vs Fire */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, electric),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, fire),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 27. Electric vs Water */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, electric),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, water),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 28. Electric vs Ground */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, electric),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, ground),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 29. Electric vs Electric */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, electric),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, electric),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 30. Electric vs Flying */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, electric),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, flying),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 31. Flying vs Leaves */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, flying),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, leaves),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 32. Flying vs Fire */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, flying),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, fire),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 33. Flying vs Water */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, flying),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, water),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 34. Flying vs Ground */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, flying),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, ground),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattack(X,Enemy),
+				mattack(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 35. Flying vs Electric */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, flying),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, electric),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackKurang(X,Enemy),
+				mattackLebih(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.
+
+/* 36. Flying vs Flying */
+attack :-
+    battle(true),
+    pickTokemon(X),
+    type(X, flying),
+
+    %enemy
+    player([A,B]),
+    musuh(Enemy, [A,B]),
+    type(Enemy, flying),
+	healthP(X,P),
+    healthM(Enemy,M),
+    (	(M > 0) ->
+			( (P > 0) ->
+		        pattackLebih(X,Enemy),
+				mattackKurang(X,Enemy), !;
+				/* Pokemon Player Mati */
+				retract(inventory(X)),
+				retract(pickPokemon(_)),
+				jumInv(A), B is A-1, asserta(jumInv(B)),
+				( (B =:= 0) ->
+					kalah, !;
+					write(X), write(' kalah. Segera pilih Tokemonmu yang lain!'), printInventory, !
+				)
+			), !;
+		/* Musuh Mati */
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
+		write(Enemy), write(' , otherwise move away.'),
+		retract(battle(true)),
+		asserta(battle(false))
+    ), !.

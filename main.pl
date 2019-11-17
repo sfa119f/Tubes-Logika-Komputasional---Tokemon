@@ -1,11 +1,13 @@
+:- include('attack.pl').
 :- include('status.pl').
 :- include('map.pl').
 :- include('heal.pl').
 :- include('pick.pl').
 :- include('capture.pl').
 :- include('drop.pl').
-:- include('attack.pl').
 :- dynamic(play/1).
+:- dynamic(menang/1).
+:- dynamic(kalah/1).
 
 % FAKTA
 
@@ -94,8 +96,8 @@ type(pikachu, electric). type(electrode, electric). type(magneton, electric).
 
 % f. Type Flying
 %     jika melawan Tokemon type :
-%	 1. grass    : damage lebih besar 50% dari biasanya.
-%	 2. electric : damage lebih kecil 50% dari biasanya.
+%	 1. leaves	: damage lebih besar 50% dari biasanya.
+%	 2. electric	: damage lebih kecil 50% dari biasanya.
 %
 % - Normal Tokemon
 type(pidgey, flying). type(spearow, flying). type(zubat, flying).
@@ -158,12 +160,16 @@ start :-
 	retract(play(false)),
 	asserta(play(true)),
 	asserta(isHeal(false)),
-	asserta(jumInv(1)),
 
+	asserta(menang(false)),
+	asserta(kalah(false)),
+
+	asserta(jumInv(1)),
 	asserta(inventory(pikachu)),
 	maxhealth(pikachu,A),
 	asserta(healthP(pikachu,A)),
 
+	asserta(jumLegend(3)),
 	asserta(legend(zapdos)),
 	maxhealth(zapdos,X),
 	asserta(healthM(zapdos,X)),
@@ -233,11 +239,17 @@ printlegend :-
     write('   - G = Gym    '),nl,
     nl.
 
+menang :-
+	play(true),
+	asserta(menang(true)),
+	write('Congratulation!!! You have helped me in defeating or capturing the
+3 Legendary Tokemons. As promised, I won’t kill you and you’re free!'),!.
 
-
-
-
-
+kalah :-
+	play(true),
+	asserta(kalah(true)),
+	write('Ho ho ho. You have failed to complete the missions. As for now,
+meet your fate and disappear from this world!'), !.
 
 
 
