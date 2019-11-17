@@ -3,6 +3,10 @@
 :- dynamic(healthP/2).
 :- dynamic(healthM/2).
 status :-
+	play(false),
+	write('Game belum dimulai'), nl,
+	nl,!.
+status :-
 	write('YOUR TOKEMON :'), nl,
 	forall(
 	    inventory(Obj),
