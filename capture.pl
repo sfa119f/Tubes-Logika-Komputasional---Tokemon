@@ -1,5 +1,6 @@
 :- dynamic(jumInv/1).
 :- dynamic(jumLegend/1).
+:- dynamic(jumMusuh/1).
 
 capture:-
 	play(false),
@@ -25,16 +26,25 @@ capture:-
 capture:-
 	jumInv(X),
 	Xn is X+1,
-	jumLegend(Y),
-	Yn is Y-1,
-
 	retract(jumInv(_)),
 	asserta(jumInv(Xn)),
-	retract(jumLegend(_)),
-	asserta(jumLegend(Yn)),
 
 	player([A,B]),
 	musuh(Obj,[A,B]),
+	(
+	    jenis(Obj,legendary)->
+	    jumLegend(Y),
+	    Yn is Y-1,
+	    retract(jumLegend(_)),
+	    asserta(jumLegend(Yn))
+	    ;
+	    !
+	),
+	jumMusuh(Z),
+	Zn is Z+1,
+	retract(jumMusuh(_)),
+	asserta(jumMusuh(Zn)),
+
 	asserta(inventory(Obj)),
 	maxhealth(Obj,A),
 	asserta(healthP(Obj,A)),

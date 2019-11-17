@@ -1,4 +1,4 @@
-%:- include('attack.pl').
+:- include('attack.pl').
 :- include('status.pl').
 :- include('map.pl').
 :- include('set.pl').
@@ -161,7 +161,7 @@ start :-
 	retract(play(false)),
 	asserta(play(true)),
 
-	setInvLgd, makeMap, /*setMusuhBiasa,*/ setMusuhLegend,
+	setInvLgd, makeMap, setMusuhBiasa, setMusuhLegend,
 	printheader, printhelp, printlegend.
 
 help :- printhelp.

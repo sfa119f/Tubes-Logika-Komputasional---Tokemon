@@ -19,12 +19,24 @@ status :-
 	nl,
 	write('YOUR LEGENDARY ENEMY :'),nl,
 	forall(
-	    legend(Msh),
+	    legend(L),
 		(
-			write(Msh), nl,
-			healthM(Msh,X),write('Health : '),write(X),nl,
-			type(Msh,Y),write('Type   : '),write(Y),nl,nl
+			write(L), nl,
+			healthM(L,X),write('Health : '),write(X),nl,
+			type(L,Y),write('Type   : '),write(Y),nl,nl
 		)
+	),
+	nl,
+	write('YOUR NORMAL ENEMY :'),nl,
+	forall(
+	    musuh(M,_),
+	    (jenis(M,normal)->
+	                write(M), nl,
+			healthM(M,X),write('Health : '),write(X),nl,
+			type(M,Y),write('Type   : '),write(Y),nl,nl
+	    ;
+	    !
+	    )
 	),
 	nl,!.
 

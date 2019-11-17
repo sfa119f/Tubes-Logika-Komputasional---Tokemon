@@ -6,9 +6,9 @@ setInvLgd:-
 	asserta(kalah(false)),
 
 	asserta(jumInv(3)),
-	random(1,18,NA),
-	random(1,18,NB),
-	random(1,18,NC),
+	random(1,6,NA),
+	random(7,12,NB),
+	random(13,18,NC),
 	nomor(A,NA),
 	nomor(B,NB),
 	nomor(C,NC),
@@ -33,5 +33,5 @@ setInvLgd:-
 	maxhealth(articuno,Z),
 	asserta(healthM(articuno,Z)),
 
-
+	asserta(jumMusuh(6)),
 	!.

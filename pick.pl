@@ -15,14 +15,16 @@ pick(Obj) :-
 	battle(true),
 	asserta(pickTokemon(Obj)),
 	write('Player: " '),write('Keluarlah '),write(Obj),write(' !"'),nl,nl,
+
 	write(Obj),nl,
-	healthP(Obj,X),write('Health: '),write(X),nl,
-	type(Obj,Y),write('Type: '),write(Y),nl,nl,
+	healthP(Obj,XP),write('Health: '),write(XP),nl,
+	type(Obj,YP),write('Type: '),write(YP),nl,nl,
+
 	player([A,B]),
 	musuh(Msh,[A,B]),
 	write(Msh),nl,
-	healthM(Msh,X),write('Health: '),write(X),nl,
-	type(Msh,Y),write('Type: '),write(Y),nl,
+	healthM(Msh,XM),write('Health: '),write(XM),nl,
+	type(Msh,YM),write('Type: '),write(YM),nl,
 	nl,!.
 
 
