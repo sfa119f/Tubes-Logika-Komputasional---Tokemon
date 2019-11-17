@@ -17,9 +17,9 @@ status :-
 		)
 	),
 	nl,
-	write('YOUR ENEMY :'),nl,
+	write('YOUR LEGENDARY ENEMY :'),nl,
 	forall(
-	    musuh(Msh,_),
+	    legend(Msh),
 		(
 			write(Msh), nl,
 			healthM(Msh,X),write('Health : '),write(X),nl,
