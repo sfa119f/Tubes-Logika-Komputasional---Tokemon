@@ -1,5 +1,4 @@
-:- include('main.pl').
-:- include('pick.pl').
+
 
 printStatusAttack(Player, Enemy) :-
     inventory(Player),
@@ -36,21 +35,22 @@ attack(X, Enemy) :-
     type(Enemy, water),
 
     healthMusuh(Enemy,atr),
-    (atr > 0) ->
-        attack(X,damageP), %fakta attack dari main.pl
-        damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
-        write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
-        updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
-        printStatusAttack(X,Enemy), %print status tokemon dan enemy
-        write(Enemy), write(' attacks!'),nl,
-        attack(Enemy,damageM), %fakta dari main.pl
-        damageMNew is damageM*1/2, %(water->leaves) damage lebih kecil 50% dari biasanya.
-        write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
-        updateHealth(X, damageMNew), 
-        printStatusAttack(X,Enemy);
-    %faint
-    write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    play(true),
+        atr > 0 ->
+            attack(X,damageP), %fakta attack dari main.pl
+            damagePNew is damageP*3/2, %Damage lebih besar 50% dari biasanya.
+            write('You dealt '), write(damagePNew), write(' damage to '), write(Enemy),
+            updateHealthMusuh(Enemy,damagePNew), %update health dari enemy
+            printStatusAttack(X,Enemy), %print status tokemon dan enemy
+            write(Enemy), write(' attacks!'),nl,
+            attack(Enemy,damageM), %fakta dari main.pl
+            damageMNew is damageM*1/2, %(water->leaves) damage lebih kecil 50% dari biasanya.
+            write('It dealts '), write(damageMNew), write(' damage to '), write(X), nl,
+            updateHealth(X, damageMNew), 
+            printStatusAttack(X,Enemy);
+        %faint
+        write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
+        write(Enemy),write(', otherwise move away.)').
 
 %attack leaves-ground     
 attack(X, Enemy) :-
@@ -77,7 +77,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy), write(', otherwise move away.)').
 
 %attack leaves-fire     
 attack(X, Enemy) :-
@@ -104,7 +104,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy), write(', otherwise move away.)').
 
 %attack leaves-flying      
 attack(X, Enemy) :-
@@ -131,7 +131,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack fire-leaves   
 attack(X, Enemy) :-
@@ -158,7 +158,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack fire-water    
 attack(X, Enemy) :-
@@ -185,7 +185,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack fire-ground     
 attack(X, Enemy) :-
@@ -212,7 +212,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack water-fire     
 attack(X, Enemy) :-
@@ -239,7 +239,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack water-electric     
 attack(X, Enemy) :-
@@ -266,7 +266,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack ground-fire    
 attack(X, Enemy) :-
@@ -293,7 +293,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack ground-electric     
 attack(X, Enemy) :-
@@ -320,7 +320,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack ground-water     
 attack(X, Enemy) :-
@@ -347,7 +347,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack ground-leaves     
 attack(X, Enemy) :-
@@ -374,7 +374,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack electric-water     
 attack(X, Enemy) :-
@@ -401,7 +401,7 @@ attack(X, Enemy) :-
         printStatusAttack(X,Enemy);
     %faint
     write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? (capture/0 to capture '),
-    write(Enemy), (' , otherwise move away.').
+    write(Enemy),write(', otherwise move away.)').
 
 %attack electric-flying     
 attack(X, Enemy) :-

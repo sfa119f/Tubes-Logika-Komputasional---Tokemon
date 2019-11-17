@@ -4,6 +4,7 @@
 :- include('pick.pl').
 :- include('capture.pl').
 :- include('drop.pl').
+:- include('attack.pl').
 :- dynamic(play/1).
 
 % FAKTA
