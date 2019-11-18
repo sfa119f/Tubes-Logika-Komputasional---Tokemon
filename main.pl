@@ -161,9 +161,9 @@ start :-
 
 	retract(play(false)),
 	asserta(play(true)),
-	
+
 	setFalseDone,
-	
+
 	setInvLgd, makeMap, setMusuhBiasa, setMusuhLegend,
 	printheader, printhelp, printlegend.
 
@@ -276,21 +276,35 @@ quit :-
 quit :-
 	keluar,
 	write('Kamu keluar dari pemainan ini.'), !.
-	
+
+/*
 save(_) :-
 	play(false),
 	write('Apa yang mau di save? game nya aja belum mulai'),nl,!.
-save(Filename :-
+save(Filename) :-
 	tell(Filename),
 		player([A,B]),
+		write(player([A,B])),write('.'),nl,
 		lebarpeta(Lebar),
+		write(lebarpeta(Lebar)),write('.'),nl,
 		panjangpeta(Panjang),
+		write(panjangpeta(Panjang)),write('.'),nl,
 		gym([X,Y]),
+		write(gym([X,Y])),write('.'),nl,
 		forall(
-	    		inventory(Obj),),
+		    inventory(Obj),
+		    (
+			write(inventory(Obj)),write('.'),nl
+		    )
+		),
 		forall(
-	    		legend(L),),!.
-Load(_) :-
+		    legend(L),
+		    (
+			write(legend(L)),write('.'),nl
+		    )
+		),
+        fold,!.
+loads(_) :-
 	play(true),
 	write('Kamu tidak bisa memulai game lainnya ketika ada game yang sudah dimulai.'), nl, !.
 loads(Filename):-
@@ -298,10 +312,10 @@ loads(Filename):-
 	write('File tersebut tidak ada.'), nl, !.
 loads(FileName):-
 	open(FileName, read, Str),
-    	read_file_lines(Str,Lines),
-    	close(Str),
-    	assertaList(Lines), !.
-
+	read_file_lines(Str,Lines),
+	close(Str),
+	assertaList(Lines), !.
+*/
 
 
 
