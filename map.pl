@@ -35,30 +35,129 @@ setMusuhBiasa :-
 	lebarPeta(Lebar),
 	random(1,Panjang,A),
 	random(1,Lebar,B),
-	random(1,6,Musuh1),
-	nomor(X,Musuh1),
-	%asserta(musuh(X,_)),
+	nomor(X,1),
 	asserta(musuh(X,[A,B])),
 	maxhealth(X,HX),
 	asserta(healthM(X,HX)),
 	!,
 	random(1,Panjang,C),
 	random(1,Lebar,D),
-	random(7,12,Musuh2),
-	nomor(Y,Musuh2),
-	%asserta(musuh(Y,_)),
+	nomor(Y,2),
 	asserta(musuh(Y,[C,D])),
 	maxhealth(Y,HY),
 	asserta(healthM(Y,HY)),
 	!,
 	random(1,Panjang,E),
 	random(1,Lebar,F),
-	random(13,18,Musuh3),
-	nomor(Z,Musuh3),
-	%asserta(musuh(Z,_)),
+	nomor(Z,3),
 	asserta(musuh(Z,[E,F])),
 	maxhealth(Z,HZ),
 	asserta(healthM(Z,HZ)),
+	!,
+	random(1,Panjang,G),
+	random(1,Lebar,H),
+	nomor(P,4),
+	asserta(musuh(P,[G,H])),
+	maxhealth(P,HP),
+	asserta(healthM(P,HP)),
+	!,
+	random(1,Panjang,I),
+	random(1,Lebar,J),
+	nomor(Q,5),
+	asserta(musuh(Q,[I,J])),
+	maxhealth(Q,HQ),
+	asserta(healthM(Q,HQ)),
+	!,
+	random(1,Panjang,K),
+	random(1,Lebar,L),
+	nomor(R,6),
+	asserta(musuh(R,[K,L])),
+	maxhealth(R,HR),
+	asserta(healthM(R,HR)),
+	!,
+	random(1,Panjang,MM),
+	random(1,Lebar,NN),
+	nomor(M,7),
+	asserta(musuh(M,[MM,NN])),
+	maxhealth(M,HM),
+	asserta(healthM(M,HM)),
+	!,
+	random(1,Panjang,OO),
+	random(1,Lebar,PP),
+	nomor(N,8),
+	asserta(musuh(N,[OO,PP])),
+	maxhealth(N,HN),
+	asserta(healthM(N,HN)),
+	!,
+	random(1,Panjang,QQ),
+	random(1,Lebar,RR),
+	nomor(O,9),
+	asserta(musuh(O,[QQ,RR])),
+	maxhealth(O,HO),
+	asserta(healthM(O,HO)),
+	!,
+	random(1,Panjang,AA),
+	random(1,Lebar,AB),
+	nomor(AC,10),
+	asserta(musuh(AC,[AA,AB])),
+	maxhealth(AC,AD),
+	asserta(healthM(AC,AD)),
+	!,
+	random(1,Panjang,BA),
+	random(1,Lebar,BB),
+	nomor(BC,11),
+	asserta(musuh(BC,[BA,BB])),
+	maxhealth(BC,BD),
+	asserta(healthM(BC,BD)),
+	!,
+	random(1,Panjang,CA),
+	random(1,Lebar,CB),
+	nomor(CC,12),
+	asserta(musuh(CC,[CA,CB])),
+	maxhealth(CC,CD),
+	asserta(healthM(CC,CD)),
+	!,
+	random(1,Panjang,DA),
+	random(1,Lebar,DB),
+	nomor(DC,13),
+	asserta(musuh(DC,[DA,DB])),
+	maxhealth(DC,DD),
+	asserta(healthM(DC,DD)),
+	!,
+	random(1,Panjang,EA),
+	random(1,Lebar,EB),
+	nomor(EC,14),
+	asserta(musuh(EC,[EA,EB])),
+	maxhealth(EC,ED),
+	asserta(healthM(EC,ED)),
+	!,
+	random(1,Panjang,FA),
+	random(1,Lebar,FB),
+	nomor(FC,15),
+	asserta(musuh(FC,[FA,FB])),
+	maxhealth(FC,FD),
+	asserta(healthM(FC,FD)),
+	!,
+	random(1,Panjang,GA),
+	random(1,Lebar,GB),
+	nomor(GC,16),
+	asserta(musuh(GC,[GA,GB])),
+	maxhealth(GC,GD),
+	asserta(healthM(GC,GD)),
+	!,
+	random(1,Panjang,HA),
+	random(1,Lebar,HB),
+	nomor(HC,17),
+	asserta(musuh(HC,[HA,HB])),
+	maxhealth(HC,HD),
+	asserta(healthM(HC,HD)),
+	!,
+	random(1,Panjang,IA),
+	random(1,Lebar,IB),
+	nomor(IC,18),
+	asserta(musuh(IC,[IA,IB])),
+	maxhealth(IC,ID),
+	asserta(healthM(IC,ID)),
 	!.
 
 setMusuhLegend :-
@@ -76,6 +175,18 @@ setMusuhLegend :-
 	random(1,Lebar,F),
 	asserta(musuh(articuno,[E,F])),
 	!.
+
+
+randomPosisi :-
+	forall((musuh(Obj,_)),
+		(panjangPeta(P),
+		lebarPeta(L),
+		random(1,P,A),
+		random(1,L,B),
+		retractall(musuh(Obj,_)),
+		asserta(musuh(Obj,[A,B])), !
+		)
+	), !.
 
 map :- play(false), write('start dulu wkwk'), !.
 map :- printMap(0,0).
@@ -116,7 +227,7 @@ printMap(X,Y) :-
 	X =:= A,
 	Y =:= B,
 	write(' M '),
-	printMap(X+1,Y).
+	printMap(X+1,Y), !.
 
 printMap(X,Y) :-
 	isBorderBawah(X,Y), isBorderKanan(X,Y), !, write(' X ').
@@ -144,9 +255,9 @@ n :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 n :- player([X,Y]), Ya is Y-1, isBorderAtas(X,Ya), write('Pagar bro'), !.
 n :- player([X,Y]), Ya is Y-1, gym([A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada Gym.'), !.
 n :- player([X,Y]), Ya is Y-1, musuh(_,[A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('A wild Tokemon appears'), nl, nl, printMusuh, write('Fight or Run?'), retract(battle(false)), asserta(battle(pending)), !.
-n :- player([X,Y]), Ya is Y-1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'), !.
-n :- player([X,Y]), Ya is Y-1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'), !.
-n :- player([X,Y]), Ya is Y-1, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'), !.
+n :- randomPosisi, player([X,Y]), Ya is Y-1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'), !.
+n :- randomPosisi, player([X,Y]), Ya is Y-1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'), !.
+n :- randomPosisi, player([X,Y]), Ya is Y-1, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Utara, anda berada pada tanah kosong.'),!.
 
 % 2. South (Bawah)
 s :- play(false), write('start dulu wkwk'), !.
@@ -155,9 +266,9 @@ s :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 s :- player([X,Y]), Ya is Y+1, isBorderBawah(X,Ya), write('Pagar bro'), !.
 s :- player([X,Y]), Ya is Y+1, gym([A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada Gym.'), !.
 s :- player([X,Y]), Ya is Y+1, musuh(_,[A,B]), X =:= A, Ya =:= B, retractall(player(_)), asserta(player([X,Ya])), write('A wild Tokemon appears'), nl, nl, printMusuh, write('Fight or Run?'), retract(battle(false)), asserta(battle(pending)), !.
-s :- player([X,Y]), Ya is Y+1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'), !.
-s :- player([X,Y]), Ya is Y+1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'), !.
-s :- player([X,Y]), Ya is Y+1, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'), !.
+s :- randomPosisi, player([X,Y]), Ya is Y+1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'), !.
+s :- randomPosisi, player([X,Y]), Ya is Y+1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'), !.
+s :- randomPosisi, player([X,Y]), Ya is Y+1, retractall(player(_)), asserta(player([X,Ya])), write('Anda bergerak ke Selatan, anda berada pada tanah kosong.'),!.
 
 % 3. East (Kanan)
 e :- play(false), write('start dulu wkwk'), !.
@@ -166,9 +277,9 @@ e :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 e :- player([X,Y]), Xa is X+1, isBorderKanan(Xa,Y), write('Pagar bro'), !.
 e :- player([X,Y]), Xa is X+1, gym([A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada Gym.'), !.
 e :- player([X,Y]), Xa is X+1, musuh(_,[A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('A wild Tokemon appears'), nl, nl, printMusuh, write('Fight or Run?'),  retract(battle(false)), asserta(battle(pending)), !.
-e :- player([X,Y]), Xa is X+1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'), !.
-e :- player([X,Y]), Xa is X+1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'), !.
-e :- player([X,Y]), Xa is X+1, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'), !.
+e :- randomPosisi, player([X,Y]), Xa is X+1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'), !.
+e :- randomPosisi, player([X,Y]), Xa is X+1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'), !.
+e :- randomPosisi, player([X,Y]), Xa is X+1, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Timur, anda berada pada tanah kosong.'),!.
 
 % 4. West (Kiri)
 w :- play(false), write('start dulu wkwk'), !.
@@ -177,9 +288,9 @@ w :- battle(pending), write('Anda tidak bisa bergerak.'), nl, write('Fight or Ru
 w :- player([X,Y]), Xa is X-1, isBorderKiri(Xa,Y), write('Pagar bro'), !.
 w :- player([X,Y]), Xa is X-1, gym([A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada Gym.'), !.
 w :- player([X,Y]), Xa is X-1, musuh(_,[A,B]), Xa =:= A, Y =:= B, retractall(player(_)), asserta(player([Xa,Y])), write('A wild Tokemon appears'), nl, nl, printMusuh, write('Fight or Run?'), retract(battle(false)), asserta(battle(pending)), !.
-w :- player([X,Y]), Xa is X-1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
-w :- player([X,Y]), Xa is X-1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
-w :- player([X,Y]), Xa is X-1, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
+w :- randomPosisi, player([X,Y]), Xa is X-1, musuh(_,[X,Y]), isRun(true), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
+w :- randomPosisi, player([X,Y]), Xa is X-1, musuh(Obj,[X,Y]), dropM(Obj), setFalseDone, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
+w :- randomPosisi, player([X,Y]), Xa is X-1, retractall(player(_)), asserta(player([Xa,Y])), write('Anda bergerak ke Barat, anda berada pada tanah kosong.'), !.
 
 %coba-coba
 printposisi :-
@@ -191,6 +302,10 @@ printposisi :-
 printMusuh :-
 	player([A,B]),
 	musuh(Obj,[A,B]),
+	(jenis(Obj,legendary) -> 
+		write('Oh No! You Meet A Legendary Tokemon.'), nl;
+		!
+	)
 	write('YOUR ENEMY : '),
 	write(Obj),
 	type(Obj,XM),

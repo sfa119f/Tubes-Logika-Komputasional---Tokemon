@@ -26,18 +26,6 @@ status :-
 			type(L,Y),write('Type   : '),write(Y),nl,nl
 		)
 	),
-	nl,
-	write('YOUR NORMAL ENEMY :'),nl,
-	forall(
-	    musuh(M,_),
-	    (jenis(M,normal)->
-	                write(M), nl,
-			healthM(M,X),write('Health : '),write(X),nl,
-			type(M,Y),write('Type   : '),write(Y),nl,nl
-	    ;
-	    !
-	    )
-	),
 	nl,!.
 
 
