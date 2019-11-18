@@ -353,10 +353,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 6. Leaves vs Electric */
@@ -383,10 +383,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 
@@ -414,10 +414,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 8. Fire vs Fire */
@@ -444,10 +444,10 @@ attack :-
 					setFalseTemp, !
 				), !;				
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 9. Fire vs Water */
@@ -504,10 +504,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 11. Fire vs Electric */
@@ -534,10 +534,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 12. Fire vs Flying */
@@ -564,10 +564,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 13. Water vs Leaves */
@@ -594,10 +594,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 14. Water vs Fire */
@@ -624,10 +624,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 15. Water vs Water */
@@ -654,10 +654,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 16. Water vs Ground */
@@ -684,10 +684,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 17. Water vs Electric */
@@ -714,10 +714,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 18. Water vs Flying */
@@ -744,10 +744,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 19. Ground vs Leaves */
@@ -774,10 +774,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 20. Ground vs Fire */
@@ -804,10 +804,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 21. Ground vs Water */
@@ -834,10 +834,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 22. Ground vs Ground */
@@ -864,10 +864,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 23. Ground vs Electric */
@@ -894,10 +894,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 24. Ground vs Flying */
@@ -924,10 +924,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 25. Electric vs Leaves */
@@ -954,10 +954,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 26. Electric vs Fire */
@@ -984,10 +984,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 27. Electric vs Water */
@@ -1014,10 +1014,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 28. Electric vs Ground */
@@ -1044,10 +1044,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 29. Electric vs Electric */
@@ -1074,10 +1074,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 30. Electric vs Flying */
@@ -1104,10 +1104,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 31. Flying vs Leaves */
@@ -1134,10 +1134,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 32. Flying vs Fire */
@@ -1164,10 +1164,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 33. Flying vs Water */
@@ -1194,10 +1194,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 34. Flying vs Ground */
@@ -1224,10 +1224,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 35. Flying vs Electric */
@@ -1254,10 +1254,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 36. Flying vs Flying */
@@ -1284,8 +1284,8 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
