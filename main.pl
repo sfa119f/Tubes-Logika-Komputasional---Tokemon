@@ -227,15 +227,25 @@ printlegend :-
 menang :-
 	play(true),
 	write('Congratulation!!! You have helped me in defeating or capturing the
-3 Legendary Tokemons. As promised, I wont kill you and youre free!'),
-	nl, nl, keluar,
+3 Legendary Tokemons. As promised, I wont kill you and youre free!'), nl, nl,
+	write('&&    && &&&&&&    &&    &&    && '),nl,
+	write(' &&  &&  &&      &&  &&   &&  &&  '),nl,
+	write('   &&    &&&&&& &&&&&&&&    &&    '),nl,
+	write('   &&    &&     &&    &&    &&    '),nl,
+	write('   &&    &&&&&& &&    &&    &&    '),nl,
+	nl,keluar,
 	!.
 
 kalah :-
 	play(true),
 	write('Ho ho ho. You have failed to complete the missions. As for now,
-meet your fate and disappear from this world!'),
-	nl, nl, keluar,
+meet your fate and disappear from this world!'),nl,nl,
+	write('&&       &&     &&&&& &&&&&& &&&&&  '),nl,
+	write('&&     &&  &&  &&     &&     &&  && '),nl,
+	write('&&    &&    &&  &&&&  &&&&&& &&&&   '),nl,
+	write('&&     &&  &&      && &&     && &&  '),nl,
+	write('&&&&&    &&    &&&&&  &&&&&& &&  && '),nl,
+	nl, keluar,
 	!.
 
 keluar :-
