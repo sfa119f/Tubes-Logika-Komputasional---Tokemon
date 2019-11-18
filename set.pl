@@ -33,5 +33,5 @@ setInvLgd:-
 	maxhealth(articuno,Z),
 	asserta(healthM(articuno,Z)),
 
-	asserta(jumMusuh(6)),
+	asserta(jumMusuh(21)),
 	!.
