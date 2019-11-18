@@ -10,6 +10,7 @@
 :- dynamic(play/1).
 :- dynamic(menang/1).
 :- dynamic(kalah/1).
+:- dynamic(isload/1).
 
 % FAKTA
 
@@ -155,6 +156,9 @@ maxhealth(oddish,500).
 %set play to false
 play(false).
 
+%set isload to false
+isload(false).
+
 start :- play(true), write('Anda sudah berada di dalam permainan.'), !.
 start :-
     play(false),
@@ -164,7 +168,11 @@ start :-
 
 	setFalseDone,
 
-	setInvLgd, makeMap, setMusuhBiasa, setMusuhLegend,
+	(isload(false)->setInvLgd, makeMap, setMusuhBiasa, setMusuhLegend
+	 ;
+	 !
+	),
+
 	printheader, printhelp, printlegend.
 
 help :- printhelp.
@@ -282,10 +290,12 @@ quit :-
 quit :-
 	keluar,
 	write('Kamu keluar dari pemainan ini.'),
+	retract(isload(_)),
+	asserta(isload(false)),
 	retract(play(true)),
 	asserta(play(false)), !.
 
-/*
+
 save(_) :-
 	play(false),
 	write('Apa yang mau di save? game nya aja belum mulai'),nl,!.
@@ -293,12 +303,23 @@ save(Filename) :-
 	tell(Filename),
 		player([A,B]),
 		write(player([A,B])),write('.'),nl,
-		lebarpeta(Lebar),
-		write(lebarpeta(Lebar)),write('.'),nl,
-		panjangpeta(Panjang),
-		write(panjangpeta(Panjang)),write('.'),nl,
+		forall(
+		    musuh(M,[MX,MY]),
+		    (
+			write(musuh(M,[MX,MY])),write('.'),nl
+		    )
+		),
+		lebarPeta(Lebar),
+		write(lebarPeta(Lebar)),write('.'),nl,
+		panjangPeta(Panjang),
+		write(panjangPeta(Panjang)),write('.'),nl,
 		gym([X,Y]),
 		write(gym([X,Y])),write('.'),nl,
+		battle(Bt),
+		write(battle(Bt)),write('.'),nl,
+
+		jumInv(JInv),
+		write(jumInv(JInv)),write('.'),nl,
 		forall(
 		    inventory(Obj),
 		    (
@@ -306,24 +327,66 @@ save(Filename) :-
 		    )
 		),
 		forall(
+		    healthP(ObjH,HP),
+		    (
+			write(healthP(ObjH,HP)),write('.'),nl
+		    )
+		),
+
+		jumMusuh(JMsh),
+		write(jumMusuh(JMsh)),write('.'),nl,
+		jumLegend(JLgd),
+		write(jumLegend(JLgd)),write('.'),nl,
+		forall(
 		    legend(L),
 		    (
 			write(legend(L)),write('.'),nl
 		    )
 		),
-        fold,!.
-loads(_) :-
+		forall(
+		    healthM(MshH,HH),
+		    (
+			write(healthM(MshH,HH)),write('.'),nl
+		    )
+		),
+
+		isHeal(Status),
+		write(isHeal(Status)),write('.'),nl,
+        told,
+	write('Permainanmu sudah di save ke dalam file '), write(Filename),
+	!.
+
+read_file_lines(Str,[]) :-
+    at_end_of_stream(Str).
+
+read_file_lines(Str,[X|L]) :-
+    \+ at_end_of_stream(Str),
+    read(Str,X),
+    read_file_lines(Str,L).
+
+assertaList([]):-
+	!.
+assertaList([X|L]) :-
+	assertz(X),
+	assertaList(L),
+	!.
+
+load(_) :-
 	play(true),
 	write('Kamu tidak bisa memulai game lainnya ketika ada game yang sudah dimulai.'), nl, !.
-loads(Filename):-
-	\+file_exists(Filename),
+load(Filename):-
+	\+exists_file(Filename),
 	write('File tersebut tidak ada.'), nl, !.
-loads(FileName):-
-	open(FileName, read, Str),
+load(Filename):-
+	open(Filename, read, Str),
 	read_file_lines(Str,Lines),
 	close(Str),
-	assertaList(Lines), !.
-*/
+	assertaList(Lines),
+	retract(isload(_)),
+	asserta(isload(true)),
+	write('Permainanmu telah di-load dari file '),write(Filename),
+	nl,!.
+
 
 
 
