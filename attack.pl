@@ -21,7 +21,7 @@ fight :-
 	!.
 
 peluangRun :- random(0,2,A),
-	assert(acakrun(A)),!.
+	asserta(acakrun(A)),!.
 
 run :- battle(false), write('Anda tidak bertemu musuh.'),!.
 run :-
@@ -36,8 +36,8 @@ run :-
 	acakrun(A),
 	A =:= 0,
 
-	retract(battle(_)),
-	assert(battle(true)),
+	retractall(battle(_)),
+	asserta(battle(true)),
 
 	retractall(isRun(_)),
 	asserta(isRun(false)),
@@ -55,8 +55,8 @@ run :-
 	acakrun(A),
 	A > 0,
 
-	retract(battle(_)),
-	assert(battle(false)),
+	retractall(battle(_)),
+	asserta(battle(false)),
 
 	write('You succesfully escaped the Tokemon.'),
 

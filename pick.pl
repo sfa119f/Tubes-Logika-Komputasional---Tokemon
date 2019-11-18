@@ -13,6 +13,7 @@ pick(Obj) :-
 	nl,!.
 pick(Obj) :-
 	battle(true),
+	retractall(pickTokemon(_)),
 	asserta(pickTokemon(Obj)),
 	write('Player: " '),write('Keluarlah '),write(Obj),write(' !"'),nl,nl,
 
