@@ -191,12 +191,11 @@ printposisi :-
 printMusuh :-
 	player([A,B]),
 	musuh(Obj,[A,B]),
-	write('YOUR ENEMY')
-	write(Obj), nl,
+	write('YOUR ENEMY : '),
+	write(Obj),
 	type(Obj,XM),
-	write('Type : '), write(XM), nl,
-	healthM(Obj,YM),
-	write('Health : '), write(YM), nl, nl, !.
+	write(' / Type '), write(XM), nl,
+	nl, !.
 
 
 

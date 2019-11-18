@@ -41,7 +41,7 @@ run :-
 
 	retractall(isRun(_)),
 	asserta(isRun(false)),
-	
+
 	write('You failed to run!'), nl,
 	write('Choose your Tokemon!'),nl,
 
@@ -58,8 +58,8 @@ run :-
 	retract(battle(_)),
 	assert(battle(false)),
 
-	write('You succesfully escaped the Tokemon.'), 
-	
+	write('You succesfully escaped the Tokemon.'),
+
 	retractall(isRun(_)),
 	asserta(isRun(true)),
 	nl,
@@ -69,9 +69,12 @@ printInventory :-
 	write('Available Tokemons: '),
 	forall(inventory(Obj),
 		  (
-			write('['),
-		        write(Obj),
-		        write('] ')
+		   write('['),
+		   write(Obj),
+		   type(Obj,X),
+		   write(' / Type '),
+		   write(X),
+		   write('] ')
 		  )
 	).
 
@@ -129,7 +132,7 @@ pattackKurang(X,Enemy) :-
 		musuhKalah(Enemy), !;
 		printStatusAttack(X,Enemy), !
 	), !.
-	 
+
 pattack(X,Enemy) :-
 	(temp(true) ->
 		setTrueTemp,
@@ -144,7 +147,7 @@ pattack(X,Enemy) :-
 			musuhKalah(Enemy), !;
 			printStatusAttack(X,Enemy), !
 	), !.
-	 
+
 mattackLebih(X,Enemy) :-
 	write(Enemy), write(' attacks!'), nl,
 	attack(Enemy,DamageM),
@@ -156,7 +159,7 @@ mattackLebih(X,Enemy) :-
 			playerKalah(X), !;
 			printStatusAttack(X,Enemy), !)
 	 , !.
-	 
+
 mattackKurang(X, Enemy) :-
         write(Enemy), write(' attacks!'),nl,
         attack(Enemy,DamageM),
@@ -198,12 +201,12 @@ musuhKalah(Enemy) :-
 		),
 		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
 		write(Enemy), write(' , otherwise move away.'),
-		
+
 		setFalseDone,
-		
+
 		retractall(battle(_)),
 		asserta(battle(false)), !.
-			
+
 attack :- play(false), write('Start dulu'), !.
 attack :- battle(false), write('Anda tidak sedang dalam battle.'), !.
 attack :- battle(pending), write('Fight or Run?'),!.
@@ -261,10 +264,10 @@ attack :-
 					setFalseTemp, !
 				)
 			), !;
-			/* Pokemon Player Mati */			
+			/* Pokemon Player Mati */
 			!
 		), !;
-		/* Musuh Mati */		
+		/* Musuh Mati */
 		!
 	), !.
 
@@ -282,7 +285,7 @@ attack :-
     healthM(Enemy,M),
     (	(M > 0) ->
 			( (P > 0) ->
-		        pattackKurang(X,Enemy), 
+		        pattackKurang(X,Enemy),
 				healthM(Enemy,HM),
 				(HM =< 0 ->
 					!;
@@ -442,7 +445,7 @@ attack :-
 						mattack(X,Enemy), !;
 						setFalseTemp, !
 					)
-				), !;				
+				), !;
 				/* Pokemon Player Mati */
 				!
 			), !;

@@ -281,7 +281,7 @@ quit :-
 
 quit :-
 	keluar,
-	write('Kamu keluar dari pemainan ini.')
+	write('Kamu keluar dari pemainan ini.'),
 	retract(play(true)),
 	asserta(play(false)), !.
 
