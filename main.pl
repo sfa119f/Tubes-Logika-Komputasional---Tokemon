@@ -1,3 +1,16 @@
+/*
+K2 Kelompok 9 :
+Arif Rahman Amrul Ghani		(13518023)
+Cynthia Athena Mahadewi Subroto (13518059)
+Syarifuddin Fakhri Al Husaini   (13518095)
+Arya Beri Argya Rasidi          (13518131)
+
+referensi pembuatan program:
+github.com/AdityaPutraS/Tubes-Logif
+github.com/yoelsusanto/PUBG-Simulator
+github.com/hafidhrendyanto/Tubes-Logif
+*/
+
 :- include('attack.pl').
 :- include('specialattack.pl').
 :- include('status.pl').
