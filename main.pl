@@ -260,10 +260,6 @@ keluar :-
 
 	retractall(acakrun(_)),
 
-	retract(play(true)),
-	asserta(play(false)),
-
-
 	nl, !.
 
 
@@ -275,7 +271,9 @@ quit :-
 
 quit :-
 	keluar,
-	write('Kamu keluar dari pemainan ini.'), !.
+	write('Kamu keluar dari pemainan ini.')
+	retract(play(true)),
+	asserta(play(false)), !.
 
 /*
 save(_) :-
