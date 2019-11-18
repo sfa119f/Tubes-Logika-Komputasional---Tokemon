@@ -305,7 +305,7 @@ printMusuh :-
 	(jenis(Obj,legendary) -> 
 		write('Oh No! You Meet A Legendary Tokemon.'), nl;
 		!
-	)
+	),
 	write('YOUR ENEMY : '),
 	write(Obj),
 	type(Obj,XM),
