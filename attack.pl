@@ -201,7 +201,7 @@ musuhKalah(Enemy) :-
 		
 		setFalseDone,
 		
-		retract(battle(true)),
+		retractall(battle(_)),
 		asserta(battle(false)), !.
 			
 attack :- play(false), write('Start dulu'), !.
@@ -223,13 +223,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 				pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -253,14 +253,14 @@ attack :-
 	( (M > 0) ->
 		( (P > 0) ->
 			pattackLebih(X,Enemy),
+			healthM(Enemy,HM),
+			(HM =< 0 ->
+				!;
 				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
+					mattackKurang(X,Enemy), !;
 					setFalseTemp, !
-				), !;
+				)
+			), !;
 			/* Pokemon Player Mati */			
 			!
 		), !;
@@ -282,14 +282,14 @@ attack :-
     healthM(Enemy,M),
     (	(M > 0) ->
 			( (P > 0) ->
-		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+		        pattackKurang(X,Enemy), 
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -312,14 +312,14 @@ attack :-
     healthM(Enemy,M),
     (	(M > 0) ->
 			( (P > 0) ->
-		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				pattackKurang(X,Enemy),
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -344,13 +344,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -374,13 +374,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -405,13 +405,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -435,13 +435,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;				
 				/* Pokemon Player Mati */
 				!
@@ -465,13 +465,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				playerKalah(X), !
@@ -495,13 +495,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -525,13 +525,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -555,13 +555,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -585,13 +585,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -615,13 +615,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -645,13 +645,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -675,13 +675,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -705,13 +705,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -735,13 +735,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -765,13 +765,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -795,13 +795,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -825,13 +825,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -855,13 +855,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -885,13 +885,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -915,13 +915,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -945,13 +945,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -975,13 +975,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1005,13 +1005,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1035,13 +1035,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1065,13 +1065,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1095,13 +1095,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1125,13 +1125,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1155,13 +1155,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1185,13 +1185,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1215,13 +1215,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattack(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattack(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattack(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1245,13 +1245,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackKurang(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackLebih(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackLebih(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
@@ -1275,13 +1275,13 @@ attack :-
     (	(M > 0) ->
 			( (P > 0) ->
 		        pattackLebih(X,Enemy),
-				(temp(false) ->
-					healthM(Enemy,HM),
-					(HM =< 0 ->
-						musuhKalah(Enemy), !;
-						mattackKurang(X,Enemy), !
-					), !;
-					setFalseTemp, !
+				healthM(Enemy,HM),
+				(HM =< 0 ->
+					!;
+					(temp(false) ->
+						mattackKurang(X,Enemy), !;
+						setFalseTemp, !
+					)
 				), !;
 				/* Pokemon Player Mati */
 				!
