@@ -232,10 +232,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 2. Leaves vs Ground */
@@ -262,10 +262,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 			/* Pokemon Player Mati */			
-			playerKalah(X), !
+			!
 		), !;
 		/* Musuh Mati */		
-		musuhKalah(Enemy), !
+		!
 	), !.
 
 /* 3. Leaves vs Fire */
@@ -292,10 +292,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 /* 4. Leaves vs Flying */
@@ -322,10 +322,10 @@ attack :-
 					setFalseTemp, !
 				), !;
 				/* Pokemon Player Mati */
-				playerKalah(X), !
+				!
 			), !;
 		/* Musuh Mati */
-		musuhKalah(Enemy), !
+		!
     ), !.
 
 
