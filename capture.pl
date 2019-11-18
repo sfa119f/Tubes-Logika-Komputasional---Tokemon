@@ -26,15 +26,12 @@ capture:-
 
 capture:-
 	play(true),
-	jumInv(X),
-	Xn is X+1,
-	retract(jumInv(_)),
-	asserta(jumInv(Xn)),
+	retractall(doneAttack(_)),
+	asserta(doneAttack(false)),
 
 	player([A,B]),
 	musuh(Obj,[A,B]),
-	(
-	    jenis(Obj,legendary)->
+	(jenis(Obj,legendary)->
 	    jumLegend(Y),
 	    Yn is Y-1,
 	    retractall(jumLegend(_)),
@@ -47,12 +44,17 @@ capture:-
 	retractall(jumMusuh(_)),
 	asserta(jumMusuh(Zn)),
 
-	retractall(doneAttack(_)),
-	asserta(doneAttack(false)),
-
-	asserta(inventory(Obj)),
-	maxhealth(Obj,A),
-	asserta(healthP(Obj,A)),
+	(inventory(Obj)->
+	    retract(healthP(Obj,_))
+	    ;
+	    jumInv(X),
+	    Xn is X+1,
+	    retract(jumInv(_)),
+	    asserta(jumInv(Xn)),
+	    asserta(inventory(Obj))
+	),
+	maxhealth(Obj,HObj),
+	asserta(healthP(Obj,HObj)),
 	write(Obj), write(' berhasil ditangkap, YEAY!!'),
 	nl, dropM(Obj), !.
 
