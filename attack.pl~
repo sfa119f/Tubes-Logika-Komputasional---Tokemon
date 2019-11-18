@@ -199,7 +199,7 @@ musuhKalah(Enemy) :-
 				menang, !; !
 			); !
 		),
-		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? "capture." to capture '),
+		write(Enemy), write(' faints! Do you want to capture '), write(Enemy), write(' ? capture/0 to capture '),
 		write(Enemy), write(' , otherwise move away.'),
 
 		setFalseDone,
